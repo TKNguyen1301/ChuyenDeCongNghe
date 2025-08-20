@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'indexes_practice',
     'meta_practice',
     'model_class_practice',
+    'query_practice',
 ]
 
 MIDDLEWARE = [
