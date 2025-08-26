@@ -1,0 +1,331 @@
+{% extends 'templates_practice/base.html' %}
+{% load blog_extras %}
+
+{% block title %}Template Filters Examples - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h1 class="mb-4">
+                <i class="fas fa-filter"></i> Django Template Filters Examples
+            </h1>
+            
+            <p class="lead">
+                Template filters transform the values of variables and tag arguments. 
+                They provide a way to format, manipulate, and process data before displaying it.
+            </p>
+
+            <!-- Built-in Filters -->
+            <section class="mb-5">
+                <h2>Built-in Filters</h2>
+                <p>Django provides many built-in filters for common formatting tasks.</p>
+
+                <h4>String Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Template Code:</h5>
+                        <div class="code-block">
+<pre><code>{{ "{{ demo_text|upper }}" }}
+{{ "{{ demo_text|lower }}" }}
+{{ "{{ demo_text|title }}" }}
+{{ "{{ demo_text|capfirst }}" }}
+{{ "{{ demo_text|length }}" }}
+{{ "{{ demo_text|truncatewords:3 }}" }}
+{{ "{{ demo_text|truncatechars:20 }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Output:</h5>
+                        <div class="code-block">
+                            {{ demo_text|upper }}<br>
+                            {{ demo_text|lower }}<br>
+                            {{ demo_text|title }}<br>
+                            {{ demo_text|capfirst }}<br>
+                            {{ demo_text|length }}<br>
+                            {{ demo_text|truncatewords:3 }}<br>
+                            {{ demo_text|truncatechars:20 }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Number Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ demo_number|floatformat:2 }}" }}
+{{ "{{ demo_number|add:100 }}" }}
+{{ "{{ demo_number|filesizeformat }}" }}
+{{ "{{ demo_percentage|percentage:1 }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ demo_number|floatformat:2 }}<br>
+                            {{ demo_number|add:100 }}<br>
+                            {{ demo_number|filesizeformat }}<br>
+                            {{ demo_percentage|floatformat:2 }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Date and Time Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ demo_date|date:'F j, Y' }}" }}
+{{ "{{ demo_date|date:'Y-m-d' }}" }}
+{{ "{{ demo_date|time:'H:i:s' }}" }}
+{{ "{{ demo_date|timesince }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ demo_date|date:"F j, Y" }}<br>
+                            {{ demo_date|date:"Y-m-d" }}<br>
+                            {{ demo_date|time:"H:i:s" }}<br>
+                            {{ demo_date|timesince }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">List and Collection Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ demo_list|length }}" }}
+{{ "{{ demo_list|first }}" }}
+{{ "{{ demo_list|last }}" }}
+{{ "{{ demo_list|join:', ' }}" }}
+{{ "{{ demo_list|slice:':3' }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ demo_list|length }}<br>
+                            {{ demo_list|first }}<br>
+                            {{ demo_list|last }}<br>
+                            {{ demo_list|join:", " }}<br>
+                            {{ demo_list|slice:":3"|join:", " }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">HTML and Safety Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ demo_html }}" }}
+{{ "{{ demo_html|safe }}" }}
+{{ "{{ demo_html|escape }}" }}
+{{ "{{ demo_html|striptags }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ demo_html }}<br>
+                            {{ demo_html|safe }}<br>
+                            {{ demo_html|escape }}<br>
+                            {{ demo_html|striptags }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">URL Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ demo_url|urlize }}" }}
+{{ "{{ demo_url|urlizetrunc:30 }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ demo_url|urlize }}<br>
+                            {{ demo_url|urlizetrunc:30 }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Logic Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ demo_empty_value|default:'No value' }}" }}
+{{ "{{ True|yesno:'Yes,No,Maybe' }}" }}
+{{ "{{ False|yesno:'Yes,No,Maybe' }}" }}
+{{ "{{ None|yesno:'Yes,No,Maybe' }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ demo_empty_value|default:"No value" }}<br>
+                            {{ True|yesno:"Yes,No,Maybe" }}<br>
+                            {{ False|yesno:"Yes,No,Maybe" }}<br>
+                            {{ None|yesno:"Yes,No,Maybe" }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Custom Filters -->
+            <section class="mb-5">
+                <h2>Custom Filters</h2>
+                <p>We've created custom filters to extend Django's template functionality.</p>
+
+                <h4>Text Processing Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ demo_text|cut:' ' }}" }}
+{{ "{{ demo_text|word_count }}" }}
+{{ "{{ demo_long_text|smart_truncate:50 }}" }}
+{{ "{{ demo_text|title_case }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ demo_text|cut:" " }}<br>
+                            {{ demo_text|word_count }} words<br>
+                            {{ demo_long_text|smart_truncate:50 }}<br>
+                            {{ demo_text|title_case }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Math Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ demo_number|multiply:2 }}" }}
+{{ "{{ 75|percentage:100 }}%" }}
+{{ "{{ demo_rating|stars }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ demo_number|multiply:2 }}<br>
+                            {{ 75|percentage:100 }}%<br>
+                            {{ demo_rating|stars }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Time Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ demo_date|time_ago }}" }}
+{{ "{{ demo_long_text|reading_time }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ demo_date|time_ago }}<br>
+                            {{ demo_long_text|reading_time }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">UI Helper Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ 'Success'|badge:'success' }}" }}
+{{ "{{ 'Warning'|badge:'warning' }}" }}
+{{ "{{ 75|progress_bar:100 }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ "Success"|badge:"success" }}<br>
+                            {{ "Warning"|badge:"warning" }}<br>
+                            {{ 75|progress_bar:100 }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chaining Filters -->
+            <section class="mb-5">
+                <h2>Chaining Filters</h2>
+                <p>Filters can be chained together to apply multiple transformations.</p>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ demo_text|lower|title }}" }}
+{{ "{{ demo_text|truncatewords:2|upper }}" }}
+{{ "{{ demo_date|date:'Y-m-d'|default:'No date' }}" }}
+{{ "{{ demo_list|slice:':3'|join:', '|title }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ demo_text|lower|title }}<br>
+                            {{ demo_text|truncatewords:2|upper }}<br>
+                            {{ demo_date|date:"Y-m-d"|default:"No date" }}<br>
+                            {{ demo_list|slice:":3"|join:", "|title }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filter Arguments -->
+            <section class="mb-5">
+                <h2>Filter Arguments</h2>
+                <p>Many filters accept arguments to customize their behavior.</p>
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Filter</th>
+                                <th>Template Code</th>
+                                <th>Output</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>truncatewords</code></td>
+                                <td><code>{{ "{{ demo_text|truncatewords:3 }}" }}</code></td>
+                                <td>{{ demo_text|truncatewords:3 }}</td>
+                                <td>Truncate after 3 words</td>
+                            </tr>
+                            <tr>
+                                <td><code>slice</code></td>
+                                <td><code>{{ "{{ demo_list|slice:':3' }}" }}</code></td>
+                                <td>{{ demo_list|slice:":3"|join:", " }}</td>
+                                <td>Get first 3 items</td>
+                            </tr>
+                            <tr>
+                                <td><code>date</code></td>
+                                <td><code>{{ "{{ demo_date|date:'F j, Y' }}" }}</code></td>
+                                <td>{{ demo_date|date:"F j, Y" }}</td>
+                                <td>Format date</td>
+                            </tr>
+                            <tr>
+                                <td><code>floatformat</code></td>
+                                <td><code>{{ "{{ demo_number|floatformat:2 }}" }}</code></td>
+                                <td>{{ demo_number|floatformat:2 }}</td>
+                                <td>Round to 2 decimal places</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Navigation -->
+            <div class="d-flex justify-content-between mt-5">
+                <a href="{% url 'templates_practice:template_engine' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Template Engine
+                </a>
+                <a href="{% url 'templates_practice:template_tags' %}" class="btn btn-primary">
+                    Next: Template Tags <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

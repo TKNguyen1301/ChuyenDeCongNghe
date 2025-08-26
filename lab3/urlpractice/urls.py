@@ -28,6 +28,7 @@ def home(request):
         <li><a href="/blog/">📝 Blog App (Namespaces Practice)</a></li>
         <li><a href="/views/">👁️ Views Practice (Django Views)</a></li>
         <li><a href="/cbv/">🏛️ Class-based Views Practice</a></li>
+        <li><a href="/templates/">🎨 Templates Practice (Django Templates)</a></li>
         <li><a href="/author-blog/">✍️ Author Blog (Namespace Instance)</a></li>
         <li><a href="/publisher-blog/">📚 Publisher Blog (Namespace Instance)</a></li>
         <li><a href="/admin/">⚙️ Admin</a></li>
@@ -74,6 +75,7 @@ urlpatterns = [
     path('blog/', include('blog.urls')),
     path('views/', include('views_practice.urls')),
     path('cbv/', include('cbv_practice.urls')),
+    path('templates/', include('templates_practice.urls')),
     
     # Multiple instances với different instance namespaces
     path('author-blog/', include('blog.urls', namespace='author-blog')),

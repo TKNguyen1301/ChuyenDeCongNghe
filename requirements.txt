@@ -1,0 +1,21 @@
+# Django Templates Practice Project Requirements
+# Generated on August 27, 2025
+
+# Core Django Framework
+Django==5.2.5
+
+# ASGI support for async operations
+asgiref==3.9.1
+
+# SQL query parsing and formatting
+sqlparse==0.5.3
+
+# Markdown processing for content
+Markdown==3.8.2
+
+# Additional packages that might be useful for Django projects:
+# Pillow==10.0.0          # Image processing
+# django-debug-toolbar    # Development debugging
+# python-decouple         # Environment variable management
+# whitenoise             # Static file serving
+# gunicorn              # Production WSGI server
