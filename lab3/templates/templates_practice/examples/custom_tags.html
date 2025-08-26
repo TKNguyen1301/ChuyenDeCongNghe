@@ -1,0 +1,173 @@
+{% extends 'templates_practice/base.html' %}
+{% load blog_extras %}
+
+{% block title %}Custom Template Tags & Filters - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h1 class="mb-4">
+                <i class="fas fa-code"></i> Custom Template Tags & Filters
+            </h1>
+            
+            <p class="lead">
+                Django allows you to create custom template tags and filters to extend 
+                the template language with your own functionality.
+            </p>
+
+            <!-- Custom Filters Section -->
+            <section class="mb-5">
+                <h2>Custom Filters</h2>
+                <p>Filters transform variables and can take arguments.</p>
+
+                <h4>String Manipulation Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Template Code:</h5>
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} load blog_extras {% templatetag closeblock %}
+{{ "hello world"|smart_title }}
+{{ "This is a test"|abbreviate:10 }}
+{{ "john.doe@example.com"|mask_email }}
+{{ "Hello World"|to_camel_case }}
+{{ "CamelCase"|to_snake_case }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Output:</h5>
+                        <div class="code-block">
+                            {{ "hello world"|smart_title }}<br>
+                            {{ "This is a test"|abbreviate:10 }}<br>
+                            {{ "john.doe@example.com"|mask_email }}<br>
+                            {{ "Hello World"|to_camel_case }}<br>
+                            {{ "CamelCase"|to_snake_case }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Number & Math Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ 123456|format_number }}
+{{ 42|multiply:3 }}
+{{ 100|percentage:200 }}
+{{ 15.75|round_currency }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ 123456|format_number }}<br>
+                            {{ 42|multiply:3 }}<br>
+                            {{ 100|percentage:200 }}%<br>
+                            ${{ 15.75|round_currency }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">UI & Utility Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ 4.5|star_rating }}
+{{ "This is important"|highlight:"important" }}
+{{ "John Doe"|user_initials }}
+{{ "success"|status_icon }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ 4.5|star_rating }}<br>
+                            {{ "This is important"|highlight:"important" }}<br>
+                            {{ "John Doe"|user_initials }}<br>
+                            {{ "success"|status_icon }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Custom Tags Section -->
+            <section class="mb-5">
+                <h2>Custom Template Tags</h2>
+
+                <h4>Simple Tags</h4>
+                <p>Simple tags are functions that take arguments and return a string.</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} current_time "Y-m-d H:i:s" {% templatetag closeblock %}
+{% templatetag openblock %} random_quote {% templatetag closeblock %}
+{% templatetag openblock %} user_greeting "John" {% templatetag closeblock %}
+{% templatetag openblock %} calculate_total 10 20 30 {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {% current_time "Y-m-d H:i:s" %}<br>
+                            {% random_quote %}<br>
+                            {% user_greeting "John" %}<br>
+                            {% calculate_total 10 20 30 %}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Assignment Tags</h4>
+                <p>Assignment tags perform computation and set the result to a context variable.</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} get_random_posts 3 as random_posts {% templatetag closeblock %}
+{% templatetag openblock %} for post in random_posts {% templatetag closeblock %}
+  - {{ post.title }}
+{% templatetag openblock %} endfor {% templatetag closeblock %}
+
+{% templatetag openblock %} generate_uuid as unique_id {% templatetag closeblock %}
+ID: {{ unique_id }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {% get_random_posts 3 as random_posts %}
+                            {% for post in random_posts %}
+                                - {{ post.title }}<br>
+                            {% endfor %}
+                            <br>
+                            {% generate_uuid as unique_id %}
+                            ID: {{ unique_id }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Inclusion Tags</h4>
+                <p>Inclusion tags render a template with context and return the result.</p>
+                
+                <h5>Recent Posts Widget</h5>
+                {% recent_posts 5 %}
+
+                <h5 class="mt-3">Popular Posts Widget</h5>
+                {% popular_posts 3 %}
+
+                <h5 class="mt-3">Category List Widget</h5>
+                {% category_list %}
+
+                <h5 class="mt-3">Tag Cloud Widget</h5>
+                {% tag_cloud %}
+
+                <h5 class="mt-3">Breadcrumb Navigation</h5>
+                {% breadcrumb "Home,Blog,Templates,Custom Tags" %}
+            </section>
+
+            <!-- Navigation -->
+            <div class="d-flex justify-content-between mt-5">
+                <a href="{% url 'templates_practice:template_inheritance' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Template Inheritance
+                </a>
+                <a href="{% url 'templates_practice:home' %}" class="btn btn-primary">
+                    Back to Home <i class="fas fa-home"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

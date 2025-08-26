@@ -1,0 +1,396 @@
+{% extends 'templates_practice/base.html' %}
+{% load blog_extras %}
+
+{% block title %}Custom Template Tags & Filters - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h1 class="mb-4">
+                <i class="fas fa-code"></i> Custom Template Tags & Filters
+            </h1>
+            
+            <p class="lead">
+                Django allows you to create custom template tags and filters to extend 
+                the template language with your own functionality.
+            </p>
+
+            <!-- Custom Filters Section -->
+            <section class="mb-5">
+                <h2>Custom Filters</h2>
+                <p>Filters transform variables and can take arguments.</p>
+
+                <h4>String Manipulation Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Template Code:</h5>
+                        <div class="code-block">
+<pre><code>{{ "hello world"|smart_title }}
+{{ "This is a test"|abbreviate:10 }}
+{{ "john.doe@example.com"|mask_email }}
+{{ "Hello World"|to_camel_case }}
+{{ "CamelCase"|to_snake_case }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Output:</h5>
+                        <div class="code-block">
+                            {{ "hello world"|smart_title }}<br>
+                            {{ "This is a test"|abbreviate:10 }}<br>
+                            {{ "john.doe@example.com"|mask_email }}<br>
+                            {{ "Hello World"|to_camel_case }}<br>
+                            {{ "CamelCase"|to_snake_case }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Number & Math Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ 123456|format_number }}
+{{ 42|multiply:3 }}
+{{ 100|percentage:200 }}
+{{ posts_sample|length|divide:2 }}
+{{ 15.75|round_currency }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ 123456|format_number }}<br>
+                            {{ 42|multiply:3 }}<br>
+                            {{ 100|percentage:200 }}%<br>
+                            {{ posts_sample|length|divide:2 }}<br>
+                            ${{ 15.75|round_currency }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Time & Date Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ sample_date|time_ago }}
+{{ sample_date|format_date:"M j, Y" }}
+{{ sample_date|weekday_name }}
+{{ sample_datetime|business_hours }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ sample_date|time_ago }}<br>
+                            {{ sample_date|format_date:"M j, Y" }}<br>
+                            {{ sample_date|weekday_name }}<br>
+                            {{ sample_datetime|business_hours }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">List & Data Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ user_list|random_item }}
+{{ user_list|join_with:" | " }}
+{{ user_list|count_items }}
+{{ nested_list|flatten_list }}
+{{ user_list|list_to_dict:"name" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ user_list|random_item }}<br>
+                            {{ user_list|join_with:" | " }}<br>
+                            {{ user_list|count_items }}<br>
+                            {% for item in nested_list|flatten_list %}{{ item }} {% endfor %}<br>
+                            {{ user_list|list_to_dict:"name"|truncatewords:3 }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">UI & Utility Filters</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ 4.5|star_rating }}
+{{ "This is important"|highlight:"important" }}
+{{ "danger"|bootstrap_class }}
+{{ "John Doe"|user_initials }}
+{{ "success"|status_icon }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ 4.5|star_rating }}<br>
+                            {{ "This is important"|highlight:"important" }}<br>
+                            <span class="{{ "danger"|bootstrap_class }}">Danger style</span><br>
+                            {{ "John Doe"|user_initials }}<br>
+                            {{ "success"|status_icon }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Custom Tags Section -->
+            <section class="mb-5">
+                <h2>Custom Template Tags</h2>
+
+                <h4>Simple Tags</h4>
+                <p>Simple tags are functions that take arguments and return a string.</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} current_time "Y-m-d H:i:s" {% templatetag closeblock %}
+{% templatetag openblock %} random_quote {% templatetag closeblock %}
+{% templatetag openblock %} user_greeting "John" {% templatetag closeblock %}
+{% templatetag openblock %} calculate_total 10 20 30 {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {% current_time "Y-m-d H:i:s" %}<br>
+                            {% random_quote %}<br>
+                            {% user_greeting "John" %}<br>
+                            {% calculate_total 10 20 30 %}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Assignment Tags</h4>
+                <p>Assignment tags perform computation and set the result to a context variable.</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} get_random_posts 3 as random_posts {% templatetag closeblock %}
+{% templatetag openblock %} for post in random_posts {% templatetag closeblock %}
+  - {{ post.title }}
+{% templatetag openblock %} endfor {% templatetag closeblock %}
+
+{% templatetag openblock %} generate_uuid as unique_id {% templatetag closeblock %}
+ID: {{ unique_id }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {% get_random_posts 3 as random_posts %}
+                            {% for post in random_posts %}
+                                - {{ post.title }}<br>
+                            {% endfor %}
+                            <br>
+                            {% generate_uuid as unique_id %}
+                            ID: {{ unique_id }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Inclusion Tags</h4>
+                <p>Inclusion tags render a template with context and return the result.</p>
+                
+                <h5>Recent Posts Widget</h5>
+                {% recent_posts 5 %}
+
+                <h5 class="mt-3">Popular Posts Widget</h5>
+                {% popular_posts 3 %}
+
+                <h5 class="mt-3">Category List Widget</h5>
+                {% category_list %}
+
+                <h5 class="mt-3">Tag Cloud Widget</h5>
+                {% tag_cloud %}
+
+                <h5 class="mt-3">Breadcrumb Navigation</h5>
+                {% breadcrumb "Home,Blog,Templates,Custom Tags" %}
+            </section>
+
+            <!-- Creating Custom Tags -->
+            <section class="mb-5">
+                <h2>How to Create Custom Tags & Filters</h2>
+
+                <h4>1. Create Template Tag Library</h4>
+                <div class="code-block">
+<pre><code># templatetags/blog_extras.py
+from django import template
+from django.utils.safestring import mark_safe
+import re
+import random
+
+register = template.Library()
+
+# Simple Filter
+@register.filter
+def multiply(value, arg):
+    """Multiply value by argument"""
+    try:
+        return int(value) * int(arg)
+    except (ValueError, TypeError):
+        return 0
+
+# Filter with multiple arguments
+@register.filter
+def abbreviate(value, max_length):
+    """Abbreviate text to max_length characters"""
+    if len(value) <= max_length:
+        return value
+    return value[:max_length-3] + "..."
+
+# Simple Tag
+@register.simple_tag
+def current_time(format_string):
+    """Return current time in specified format"""
+    from datetime import datetime
+    return datetime.now().strftime(format_string)
+
+# Assignment Tag
+@register.simple_tag
+def get_random_posts(count):
+    """Get random posts"""
+    from .models import Post
+    posts = list(Post.objects.all())
+    return random.sample(posts, min(count, len(posts)))
+
+# Inclusion Tag
+@register.inclusion_tag('templatetags/recent_posts.html')
+def recent_posts(count=5):
+    """Render recent posts widget"""
+    from .models import Post
+    posts = Post.objects.order_by('-created_at')[:count]
+    return {'posts': posts}</code></pre>
+                </div>
+
+                <h4 class="mt-4">2. Load in Template</h4>
+                <div class="code-block">
+<pre><code>{% templatetag openblock %} load blog_extras {% templatetag closeblock %}
+
+{{ value|multiply:3 }}
+{{ long_text|abbreviate:50 }}
+{% templatetag openblock %} current_time "Y-m-d" {% templatetag closeblock %}
+{% templatetag openblock %} get_random_posts 5 as posts {% templatetag closeblock %}
+{% templatetag openblock %} recent_posts 10 {% templatetag closeblock %}</code></pre>
+                </div>
+
+                <h4 class="mt-4">3. Advanced Tag with Parser</h4>
+                <div class="code-block">
+<pre><code>@register.tag
+def format_list(parser, token):
+    """Format list with custom template"""
+    try:
+        tag_name, var_name, template_name = token.split_contents()
+    except ValueError:
+        raise template.TemplateSyntaxError(
+            f"{token.contents.split()[0]} tag requires exactly two arguments"
+        )
+    return FormatListNode(var_name, template_name)
+
+class FormatListNode(template.Node):
+    def __init__(self, var_name, template_name):
+        self.var_name = template.Variable(var_name)
+        self.template_name = template.Variable(template_name)
+    
+    def render(self, context):
+        try:
+            items = self.var_name.resolve(context)
+            template_name = self.template_name.resolve(context)
+            # Custom rendering logic
+            return render_to_string(template_name, {'items': items})
+        except template.VariableDoesNotExist:
+            return ''</code></pre>
+                </div>
+            </section>
+
+            <!-- Best Practices -->
+            <section class="mb-5">
+                <h2>Best Practices</h2>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">
+                                <h5><i class="fas fa-lightbulb"></i> Tips</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li>Handle exceptions gracefully</li>
+                                    <li>Use <code>mark_safe()</code> for HTML output</li>
+                                    <li>Keep filters simple and focused</li>
+                                    <li>Use inclusion tags for reusable widgets</li>
+                                    <li>Document your custom tags</li>
+                                    <li>Test edge cases thoroughly</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-warning text-dark">
+                                <h5><i class="fas fa-exclamation-triangle"></i> Gotchas</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li>Filters can't access request context</li>
+                                    <li>Be careful with HTML escaping</li>
+                                    <li>Template tag library names must be unique</li>
+                                    <li>Complex logic belongs in views, not templates</li>
+                                    <li>Performance: database queries in tags</li>
+                                    <li>Import templatetags properly</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Performance Considerations -->
+            <section class="mb-5">
+                <h2>Performance Considerations</h2>
+                
+                <div class="alert alert-warning">
+                    <h5><i class="fas fa-tachometer-alt"></i> Database Queries</h5>
+                    <p>Be careful with database queries in custom tags:</p>
+                    <div class="code-block">
+<pre><code># ❌ Bad: N+1 queries
+@register.inclusion_tag('tags/post_list.html')
+def recent_posts_bad():
+    posts = Post.objects.all()[:5]
+    return {'posts': posts}  # Each post.author access = 1 query
+
+# ✅ Good: Optimized queries
+@register.inclusion_tag('tags/post_list.html')
+def recent_posts_good():
+    posts = Post.objects.select_related('author').prefetch_related('tags')[:5]
+    return {'posts': posts}  # Optimized with joins</code></pre>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <h5><i class="fas fa-memory"></i> Caching</h5>
+                    <p>Cache expensive operations:</p>
+                    <div class="code-block">
+<pre><code>from django.core.cache import cache
+
+@register.simple_tag
+def expensive_calculation():
+    result = cache.get('expensive_result')
+    if result is None:
+        # Expensive operation
+        result = perform_calculation()
+        cache.set('expensive_result', result, 300)  # 5 minutes
+    return result</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Navigation -->
+            <div class="d-flex justify-content-between mt-5">
+                <a href="{% url 'templates_practice:template_inheritance' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Template Inheritance
+                </a>
+                <a href="{% url 'templates_practice:home' %}" class="btn btn-primary">
+                    Back to Home <i class="fas fa-home"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

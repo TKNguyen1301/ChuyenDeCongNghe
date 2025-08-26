@@ -1,0 +1,180 @@
+{% extends 'cbv_practice/base.html' %}
+
+{% block title %}Home - Class-based Views Practice{% endblock %}
+
+{% block header_title %}Class-based Views Practice{% endblock %}
+{% block header_subtitle %}Django CBV Examples from Official Documentation{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>🎯 Welcome to Class-based Views Practice</h2>
+    <p>This application demonstrates all major concepts from the Django Class-based Views documentation:</p>
+    
+    <div class="grid">
+        <div class="card">
+            <h3>📋 What You'll Learn</h3>
+            <ul>
+                <li><strong>Basic View Class</strong> - HTTP method dispatch</li>
+                <li><strong>TemplateView</strong> - Template rendering with context</li>
+                <li><strong>RedirectView</strong> - URL redirections</li>
+                <li><strong>ListView</strong> - Object listing with pagination</li>
+                <li><strong>DetailView</strong> - Single object display</li>
+                <li><strong>Async Views</strong> - Asynchronous processing</li>
+                <li><strong>Custom Mixins</strong> - Code reuse patterns</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h3>🔍 Quick Navigation</h3>
+            <div style="display: grid; gap: 0.5rem;">
+                <a href="{% url 'cbv_practice:basic-view' %}" class="btn">Basic View Example</a>
+                <a href="{% url 'cbv_practice:json-response' %}" class="btn">JSON Response View</a>
+                <a href="{% url 'cbv_practice:random-book' %}" class="btn">Random Book (Redirect)</a>
+                <a href="{% url 'cbv_practice:enhanced-book-list' %}" class="btn">Enhanced ListView</a>
+                <a href="{% url 'cbv_practice:async-view' %}" class="btn">Async View Demo</a>
+                <a href="{% url 'cbv_practice:stats' %}" class="btn">Statistics Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Overview -->
+<div class="card">
+    <h2>📊 Library Statistics</h2>
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-number">{{ recent_books.count }}</div>
+            <div class="stat-label">Recent Books</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ featured_articles.count }}</div>
+            <div class="stat-label">Featured Articles</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ popular_categories.count }}</div>
+            <div class="stat-label">Categories</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ new_releases.count }}</div>
+            <div class="stat-label">New Releases</div>
+        </div>
+    </div>
+</div>
+
+{% if recent_books %}
+<div class="card">
+    <h2>📚 Recent Books</h2>
+    <div class="grid">
+        {% for book in recent_books %}
+        <div class="card">
+            <h4><a href="{% url 'cbv_practice:book-detail' book.pk %}">{{ book.title }}</a></h4>
+            <p><strong>Authors:</strong> {% for author in book.authors.all %}{{ author.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+            <p><strong>Category:</strong> <a href="{% url 'cbv_practice:category-detail' book.category.slug %}">{{ book.category.name }}</a></p>
+            <p><strong>Published:</strong> {{ book.publication_date|date:"F Y" }}</p>
+            <p><strong>Price:</strong> ${{ book.price }}</p>
+            {% if book.is_new_release %}
+            <span class="alert alert-info" style="display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.8rem;">🆕 New Release</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <div style="text-align: center; margin-top: 1rem;">
+        <a href="{% url 'cbv_practice:book-list' %}" class="btn">View All Books</a>
+    </div>
+</div>
+{% endif %}
+
+{% if featured_articles %}
+<div class="card">
+    <h2>📝 Featured Articles</h2>
+    <div class="grid">
+        {% for article in featured_articles %}
+        <div class="card">
+            <h4><a href="{% url 'cbv_practice:article-detail' article.slug %}">{{ article.title }}</a></h4>
+            <p><strong>Author:</strong> <a href="{% url 'cbv_practice:author-detail' article.author.pk %}">{{ article.author.name }}</a></p>
+            <p><strong>Category:</strong> <a href="{% url 'cbv_practice:category-detail' article.category.slug %}">{{ article.category.name }}</a></p>
+            <p><strong>Published:</strong> {{ article.published_date|date:"M d, Y" }}</p>
+            <p><strong>Views:</strong> {{ article.views_count }}</p>
+            <p>{{ article.content|truncatewords:20 }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    <div style="text-align: center; margin-top: 1rem;">
+        <a href="{% url 'cbv_practice:article-list' %}" class="btn">View All Articles</a>
+    </div>
+</div>
+{% endif %}
+
+{% if popular_categories %}
+<div class="card">
+    <h2>🏷️ Popular Categories</h2>
+    <div class="grid">
+        {% for category in popular_categories %}
+        <div class="card">
+            <h4><a href="{% url 'cbv_practice:category-detail' category.slug %}">{{ category.name }}</a></h4>
+            <p>{{ category.description|default:"No description available." }}</p>
+            <p><strong>Books:</strong> {{ category.book_count }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<div class="card">
+    <h2>🚀 Class-based Views Features Demo</h2>
+    <p>Explore different CBV patterns and techniques:</p>
+    
+    <div class="grid">
+        <div class="card">
+            <h3>🔧 Basic Views</h3>
+            <p>Simple examples of base View class with HTTP method dispatch.</p>
+            <a href="{% url 'cbv_practice:basic-view' %}" class="btn">Try Basic View</a>
+        </div>
+        
+        <div class="card">
+            <h3>📄 Template Views</h3>
+            <p>TemplateView examples with dynamic context data.</p>
+            <a href="{% url 'cbv_practice:about' %}" class="btn">View About Page</a>
+        </div>
+        
+        <div class="card">
+            <h3>🔄 Redirect Views</h3>
+            <p>RedirectView patterns for URL forwarding.</p>
+            <a href="{% url 'cbv_practice:random-book' %}" class="btn">Random Redirect</a>
+        </div>
+        
+        <div class="card">
+            <h3>📋 List Views</h3>
+            <p>ListView with pagination, filtering, and search.</p>
+            <a href="{% url 'cbv_practice:enhanced-book-list' %}" class="btn">Enhanced List</a>
+        </div>
+        
+        <div class="card">
+            <h3>🔍 Detail Views</h3>
+            <p>DetailView with related objects and custom context.</p>
+            {% if recent_books.first %}
+            <a href="{% url 'cbv_practice:book-detail' recent_books.first.pk %}" class="btn">View Book Detail</a>
+            {% else %}
+            <span class="btn btn-secondary">No books available</span>
+            {% endif %}
+        </div>
+        
+        <div class="card">
+            <h3>⚡ Async Views</h3>
+            <p>Asynchronous class-based views with async/await.</p>
+            <a href="{% url 'cbv_practice:async-view' %}" class="btn">Try Async View</a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>📖 Documentation References</h2>
+    <p>This practice application is based on:</p>
+    <ul>
+        <li><a href="https://docs.djangoproject.com/en/5.2/topics/class-based-views/" target="_blank">Class-based views</a></li>
+        <li><a href="https://docs.djangoproject.com/en/5.2/topics/class-based-views/intro/" target="_blank">Introduction to class-based views</a></li>
+        <li><a href="https://docs.djangoproject.com/en/5.2/topics/class-based-views/generic-display/" target="_blank">Built-in class-based generic views</a></li>
+        <li><a href="https://docs.djangoproject.com/en/5.2/ref/class-based-views/" target="_blank">Class-based views reference</a></li>
+    </ul>
+</div>
+{% endblock %}

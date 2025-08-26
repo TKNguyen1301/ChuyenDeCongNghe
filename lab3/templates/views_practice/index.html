@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .section h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .view-list {
+            list-style: none;
+            padding: 0;
+        }
+        .view-item {
+            margin: 10px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            border-radius: 0 5px 5px 0;
+        }
+        .view-item h4 {
+            margin: 0 0 5px 0;
+            color: #2c3e50;
+        }
+        .view-item p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .view-link {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 3px;
+            margin-top: 10px;
+        }
+        .view-link:hover {
+            background: #2980b9;
+        }
+        .breadcrumb {
+            margin-bottom: 20px;
+        }
+        .breadcrumb a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .nav-links {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .nav-links a {
+            color: #2c3e50;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ title }}</h1>
+        <p>Comprehensive Django Views Practice - Based on Official Documentation</p>
+    </div>
+    
+    <div class="nav-links">
+        <a href="/">🏠 Home</a>
+        <a href="/articles/">📰 Articles (URL Practice)</a>
+        <a href="/blog/">📝 Blog (Namespaces)</a>
+        <a href="/views/">👁️ Views Practice</a>
+    </div>
+
+    <div class="section">
+        <h3>📖 About Django Views</h3>
+        <p>A view function, or view for short, is a Python function that takes a web request and returns a web response. This response can be the HTML contents of a web page, or a redirect, or a 404 error, or an XML document, or an image... or anything, really.</p>
+        <p>This page demonstrates all the concepts covered in the Django Views documentation at: 
+        <a href="https://docs.djangoproject.com/en/5.2/topics/http/views/" target="_blank">
+            https://docs.djangoproject.com/en/5.2/topics/http/views/
+        </a></p>
+    </div>
+
+    {% for section in views_examples %}
+    <div class="section">
+        <h3>{{ section.name }}</h3>
+        <ul class="view-list">
+            {% for item in section.items %}
+            <li class="view-item">
+                <h4>{{ item.title }}</h4>
+                <p>{{ item.description }}</p>
+                {% if item.params %}
+                    <a href="{% url item.url %}{% for param in item.params %}{{ param }}/{% endfor %}" class="view-link">
+                        Try it →
+                    </a>
+                {% else %}
+                    <a href="{% url item.url %}" class="view-link">
+                        Try it →
+                    </a>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+
+    <div class="section">
+        <h3>🧪 Testing Tips</h3>
+        <ul>
+            <li><strong>Error Views:</strong> Try accessing non-existent items or trigger permission errors</li>
+            <li><strong>HTTP Methods:</strong> Use browser developer tools to test different methods</li>
+            <li><strong>JSON Views:</strong> Perfect for testing API endpoints</li>
+            <li><strong>Async Views:</strong> Notice the slight delay in async datetime view</li>
+            <li><strong>Forms:</strong> Test both valid and invalid form submissions</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>🔧 Features Implemented</h3>
+        <ul>
+            <li>✅ Simple function-based views</li>
+            <li>✅ Views with URL parameters</li>
+            <li>✅ Error handling (Http404, custom status codes)</li>
+            <li>✅ HTTP method restrictions</li>
+            <li>✅ Async views</li>
+            <li>✅ JSON responses</li>
+            <li>✅ Template rendering</li>
+            <li>✅ Redirects (internal & external)</li>
+            <li>✅ Form handling</li>
+            <li>✅ Custom error pages</li>
+        </ul>
+    </div>
+</body>
+</html>

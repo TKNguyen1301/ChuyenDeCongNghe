@@ -1,0 +1,222 @@
+{% extends 'cbv_practice/base.html' %}
+
+{% block title %}Statistics - Class-based Views Practice{% endblock %}
+
+{% block header_title %}📊 Library Statistics{% endblock %}
+{% block header_subtitle %}TemplateView with Complex Context Data{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>📈 Overview Statistics</h2>
+    <p>This page demonstrates <code>TemplateView</code> with complex context data generation using Django ORM aggregations and annotations.</p>
+    
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-number">{{ total_books }}</div>
+            <div class="stat-label">Total Books</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ available_books }}</div>
+            <div class="stat-label">Available Books</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ total_authors }}</div>
+            <div class="stat-label">Authors</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ total_articles }}</div>
+            <div class="stat-label">Published Articles</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ total_categories }}</div>
+            <div class="stat-label">Categories</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ recent_books }}</div>
+            <div class="stat-label">Recent Books (30 days)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ active_authors }}</div>
+            <div class="stat-label">Active Authors</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ popular_books.count }}</div>
+            <div class="stat-label">Popular Books</div>
+        </div>
+    </div>
+</div>
+
+{% if popular_books %}
+<div class="card">
+    <h2>🔥 Popular Books</h2>
+    <p>Most recently added books in the library:</p>
+    
+    <div class="grid">
+        {% for book in popular_books %}
+        <div class="card">
+            <h4><a href="{% url 'cbv_practice:book-detail' book.pk %}">{{ book.title }}</a></h4>
+            <p><strong>Authors:</strong> 
+                {% for author in book.authors.all %}
+                    {{ author.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+            <p><strong>Category:</strong> {{ book.category.name }}</p>
+            <p><strong>Published:</strong> {{ book.publication_date|date:"F Y" }}</p>
+            <p><strong>Price:</strong> ${{ book.price }}</p>
+            <p><strong>Added:</strong> {{ book.created_at|date:"M d, Y H:i" }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if categories_with_stats %}
+<div class="card">
+    <h2>🏷️ Categories with Statistics</h2>
+    <p>Categories ordered by book count, showing Django ORM annotations in action:</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Books</th>
+                <th>Articles</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories_with_stats %}
+            <tr>
+                <td><a href="{% url 'cbv_practice:category-detail' category.slug %}">{{ category.name }}</a></td>
+                <td>{{ category.description|truncatewords:8|default:"No description" }}</td>
+                <td>{{ category.book_count }}</td>
+                <td>{{ category.article_count }}</td>
+                <td>
+                    <a href="{% url 'cbv_practice:category-detail' category.slug %}" class="btn" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<div class="card">
+    <h2>🔍 Data Analysis Examples</h2>
+    <p>This statistics page demonstrates several Django ORM features:</p>
+    
+    <div class="grid">
+        <div class="card">
+            <h3>📊 Count Aggregations</h3>
+            <p>Simple counting using <code>.count()</code> method:</p>
+            <code>Book.objects.count()</code>
+            <br><br>
+            <p>Result: <strong>{{ total_books }}</strong> total books</p>
+        </div>
+        
+        <div class="card">
+            <h3>🔢 Annotations</h3>
+            <p>Adding calculated fields with <code>.annotate()</code>:</p>
+            <code>Category.objects.annotate(book_count=Count('books'))</code>
+            <br><br>
+            <p>Enables sorting categories by popularity</p>
+        </div>
+        
+        <div class="card">
+            <h3>📅 Date Filtering</h3>
+            <p>Time-based filtering with <code>timedelta</code>:</p>
+            <code>Book.objects.filter(created_at__gte=thirty_days_ago)</code>
+            <br><br>
+            <p>Recent books: <strong>{{ recent_books }}</strong></p>
+        </div>
+        
+        <div class="card">
+            <h3>🔗 Complex Filters</h3>
+            <p>Using Q objects and filter conditions:</p>
+            <code>Author.objects.annotate(recent_books=Count('books', filter=Q(...)))</code>
+            <br><br>
+            <p>Active authors: <strong>{{ active_authors }}</strong></p>
+        </div>
+        
+        <div class="card">
+            <h3>📋 Ordering</h3>
+            <p>Sorting by annotated fields:</p>
+            <code>.order_by('-book_count')</code>
+            <br><br>
+            <p>Categories sorted by book count</p>
+        </div>
+        
+        <div class="card">
+            <h3>🎯 Boolean Filtering</h3>
+            <p>Filtering by boolean fields:</p>
+            <code>Book.objects.filter(is_available=True)</code>
+            <br><br>
+            <p>Available: <strong>{{ available_books }}</strong>/{{ total_books }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>💻 TemplateView Implementation</h2>
+    <p>This page demonstrates how to create rich dashboard views using <code>TemplateView</code>:</p>
+    
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; overflow-x: auto;">
+        <pre><code>class StatsView(TemplateView):
+    template_name = 'cbv_practice/stats.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Time calculations
+        now = timezone.now()
+        thirty_days_ago = now - timedelta(days=30)
+        
+        # Basic counts
+        context.update({
+            'total_books': Book.objects.count(),
+            'available_books': Book.objects.filter(is_available=True).count(),
+            'total_authors': Author.objects.count(),
+            # ... more context data
+        })
+        
+        return context</code></pre>
+    </div>
+</div>
+
+<div class="card">
+    <h2>🚀 Performance Insights</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>🎯 Query Optimization</h3>
+            <p>All statistics are calculated in a single view method, minimizing database hits.</p>
+        </div>
+        
+        <div class="card">
+            <h3>📊 Annotation Benefits</h3>
+            <p>Using database-level counting instead of Python loops for better performance.</p>
+        </div>
+        
+        <div class="card">
+            <h3>🔄 Caching Potential</h3>
+            <p>This data could be cached to improve response times for frequently accessed statistics.</p>
+        </div>
+        
+        <div class="card">
+            <h3>📈 Scalability</h3>
+            <p>ORM aggregations scale well with large datasets compared to Python calculations.</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>🔗 Explore More</h2>
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="{% url 'cbv_practice:book-list' %}" class="btn">View All Books</a>
+        <a href="{% url 'cbv_practice:author-list' %}" class="btn">View All Authors</a>
+        <a href="{% url 'cbv_practice:article-list' %}" class="btn">View All Articles</a>
+        <a href="{% url 'cbv_practice:async-stats' %}" class="btn">Async Statistics</a>
+        <a href="{% url 'cbv_practice:home' %}" class="btn btn-secondary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

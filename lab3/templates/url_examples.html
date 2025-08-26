@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>URL Reverse Examples</title>
+</head>
+<body>
+    <h1>URL Reverse Examples</h1>
+    
+    <h2>Articles URLs</h2>
+    <ul>
+        <li><a href="{% url 'news-year-archive' 2024 %}">Year Archive 2024</a></li>
+        <li><a href="{% url 'news-month-archive' 2024 12 %}">Month Archive 2024/12</a></li>
+        <li><a href="{% url 'news-article-detail' 2024 12 'django-urls' %}">Article Detail</a></li>
+        <li><a href="{% url 'custom-year-archive' 2024 %}">Custom Year Archive 2024</a></li>
+    </ul>
+    
+    <h2>Blog URLs with Namespaces</h2>
+    <ul>
+        <li><a href="{% url 'blog:index' %}">Blog Index</a></li>
+        <li><a href="{% url 'blog:page' 5 %}">Blog Page 5</a></li>
+        <li><a href="{% url 'blog:post-detail' 123 %}">Post Detail 123</a></li>
+        <li><a href="{% url 'author-blog:index' %}">Author Blog Index</a></li>
+        <li><a href="{% url 'publisher-blog:index' %}">Publisher Blog Index</a></li>
+    </ul>
+    
+    <h2>Dynamic Year Links</h2>
+    <ul>
+        {% for year in year_list %}
+            <li><a href="{% url 'news-year-archive' year %}">{{ year }} Archive</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

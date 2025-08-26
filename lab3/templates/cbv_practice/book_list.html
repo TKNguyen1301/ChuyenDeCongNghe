@@ -1,0 +1,177 @@
+{% extends 'cbv_practice/base.html' %}
+
+{% block title %}Books - Class-based Views Practice{% endblock %}
+
+{% block header_title %}📚 Book Library{% endblock %}
+{% block header_subtitle %}ListView Example with Pagination, Search & Filtering{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>📚 Book Collection</h2>
+    <p>This page demonstrates Django's <code>ListView</code> with advanced features including search, filtering, pagination, and HEAD method support.</p>
+    
+    <!-- Search and Filter Form -->
+    <form method="get" class="search-form">
+        <input type="text" name="search" value="{{ search_query }}" placeholder="Search books by title, description, or author...">
+        <select name="category">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+            <option value="{{ category.slug }}" {% if category.slug == selected_category %}selected{% endif %}>
+                {{ category.name }}
+            </option>
+            {% endfor %}
+        </select>
+        <label>
+            <input type="checkbox" name="available_only" value="1" {% if request.GET.available_only %}checked{% endif %}>
+            Available only
+        </label>
+        <button type="submit" class="btn">Search</button>
+        <a href="{% url 'cbv_practice:book-list' %}" class="btn btn-secondary">Clear</a>
+    </form>
+    
+    <p><strong>Total found:</strong> {{ total_count }} book{{ total_count|pluralize }}</p>
+</div>
+
+{% if books %}
+<div class="card">
+    <h3>📖 Books (Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }})</h3>
+    
+    <div class="grid">
+        {% for book in books %}
+        <div class="card">
+            <h4><a href="{% url 'cbv_practice:book-detail' book.pk %}">{{ book.title }}</a></h4>
+            
+            <p><strong>Authors:</strong> 
+                {% for author in book.authors.all %}
+                    <a href="{% url 'cbv_practice:author-detail' author.pk %}">{{ author.name }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+            
+            <p><strong>Category:</strong> 
+                <a href="{% url 'cbv_practice:category-detail' book.category.slug %}">{{ book.category.name }}</a>
+            </p>
+            
+            <p><strong>Published:</strong> {{ book.publication_date|date:"F Y" }}</p>
+            <p><strong>Pages:</strong> {{ book.pages }}</p>
+            <p><strong>Price:</strong> ${{ book.price }}</p>
+            <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+            
+            <p>{{ book.description|truncatewords:15 }}</p>
+            
+            <div style="margin-top: 1rem;">
+                {% if book.is_available %}
+                    <span class="alert alert-success" style="display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.8rem;">✅ Available</span>
+                {% else %}
+                    <span class="alert" style="display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.8rem; background: #f8d7da; color: #721c24;">❌ Not Available</span>
+                {% endif %}
+                
+                {% if book.is_new_release %}
+                    <span class="alert alert-info" style="display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.8rem;">🆕 New Release</span>
+                {% endif %}
+            </div>
+            
+            <div style="margin-top: 1rem;">
+                <a href="{% url 'cbv_practice:book-detail' book.pk %}" class="btn">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}{% if request.GET.available_only %}available_only=1&{% endif %}page=1">&laquo; First</a>
+        <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}{% if request.GET.available_only %}available_only=1&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+    
+    <span style="padding: 0.5rem 1rem; margin: 0 0.25rem; background: #667eea; color: white; border-radius: 3px;">
+        {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+    
+    {% if page_obj.has_next %}
+        <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}{% if request.GET.available_only %}available_only=1&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}{% if request.GET.available_only %}available_only=1&{% endif %}page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<div class="card">
+    <h3>📭 No Books Found</h3>
+    {% if search_query or selected_category %}
+        <p>No books match your search criteria. Try adjusting your filters or <a href="{% url 'cbv_practice:book-list' %}">view all books</a>.</p>
+    {% else %}
+        <p>No books are available in the library yet.</p>
+    {% endif %}
+</div>
+{% endif %}
+
+<div class="card">
+    <h2>💡 ListView Features Demonstrated</h2>
+    <p>This page showcases several important ListView capabilities:</p>
+    
+    <div class="grid">
+        <div class="card">
+            <h3>🔍 Search Functionality</h3>
+            <p>Custom <code>get_queryset()</code> method implements search across multiple fields using Django Q objects.</p>
+            <code>Q(title__icontains=search) | Q(description__icontains=search)</code>
+        </div>
+        
+        <div class="card">
+            <h3>🏷️ Category Filtering</h3>
+            <p>Filter books by category using URL parameters processed in the queryset method.</p>
+            <code>queryset.filter(category__slug=category)</code>
+        </div>
+        
+        <div class="card">
+            <h3>📄 Pagination</h3>
+            <p>Built-in pagination with <code>paginate_by = 10</code> attribute.</p>
+            <code>{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</code>
+        </div>
+        
+        <div class="card">
+            <h3>🚀 Query Optimization</h3>
+            <p>Using <code>select_related()</code> and <code>prefetch_related()</code> to minimize database queries.</p>
+            <code>select_related('category').prefetch_related('authors')</code>
+        </div>
+        
+        <div class="card">
+            <h3>📊 Context Data</h3>
+            <p>Custom context variables added via <code>get_context_data()</code> method.</p>
+            <code>context['total_count'] = self.get_queryset().count()</code>
+        </div>
+        
+        <div class="card">
+            <h3>🔄 HEAD Method</h3>
+            <p>Support for HTTP HEAD requests as shown in Django documentation.</p>
+            <code>def head(self, *args, **kwargs):</code>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>🔗 Quick Actions</h2>
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="{% url 'cbv_practice:enhanced-book-list' %}" class="btn">Enhanced ListView (with Mixins)</a>
+        <a href="{% url 'cbv_practice:author-list' %}" class="btn">View Authors</a>
+        <a href="{% url 'cbv_practice:article-list' %}" class="btn">View Articles</a>
+        <a href="{% url 'cbv_practice:random-book' %}" class="btn">Random Book</a>
+    </div>
+</div>
+
+{% if categories %}
+<div class="card">
+    <h2>🏷️ Browse by Category</h2>
+    <div class="grid">
+        {% for category in categories %}
+        <div class="card">
+            <h4><a href="{% url 'cbv_practice:category-detail' category.slug %}">{{ category.name }}</a></h4>
+            <p>{{ category.description|default:"Category description not available."|truncatewords:10 }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

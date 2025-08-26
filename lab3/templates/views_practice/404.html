@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>404 - Page Not Found</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            text-align: center;
+        }
+        .error-container {
+            background: #f8f9fa;
+            border: 1px solid #e74c3c;
+            border-radius: 10px;
+            padding: 40px;
+            margin-top: 50px;
+        }
+        .error-code {
+            font-size: 80px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin: 0;
+        }
+        .error-message {
+            font-size: 24px;
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+        .error-description {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        .back-link {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1 class="error-code">404</h1>
+        <h2 class="error-message">Page Not Found</h2>
+        <p class="error-description">
+            Sorry, the page you are looking for doesn't exist.<br>
+            This is a custom 404 error page created for Django Views practice.
+        </p>
+        <a href="/" class="back-link">🏠 Go Home</a>
+        <a href="/views/" class="back-link">👁️ Views Practice</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+{% extends 'cbv_practice/base.html' %}
+
+{% block title %}Authors - Class-based Views Practice{% endblock %}
+
+{% block header_title %}👨‍💼 Authors{% endblock %}
+{% block header_subtitle %}ListView with Annotations and Custom Ordering{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>👨‍💼 Our Authors</h2>
+    <p>Meet our talented authors who contribute to our library. This page demonstrates <code>ListView</code> with annotations and custom ordering.</p>
+    
+    <p><strong>Total Authors:</strong> {{ total_authors }}</p>
+</div>
+
+{% if authors %}
+<div class="card">
+    <h3>📖 Author Directory</h3>
+    
+    <div class="grid">
+        {% for author in authors %}
+        <div class="card">
+            <h4><a href="{% url 'cbv_practice:author-detail' author.pk %}">{{ author.name }}</a></h4>
+            
+            <p><strong>Email:</strong> <a href="mailto:{{ author.email }}">{{ author.email }}</a></p>
+            
+            {% if author.birth_date %}
+            <p><strong>Born:</strong> {{ author.birth_date|date:"F d, Y" }}</p>
+            {% endif %}
+            
+            <p><strong>Bio:</strong> {{ author.bio|truncatewords:15 }}</p>
+            
+            <div class="stats" style="margin: 1rem 0;">
+                <div class="stat-card">
+                    <div class="stat-number">{{ author.book_count }}</div>
+                    <div class="stat-label">Books</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ author.article_count }}</div>
+                    <div class="stat-label">Articles</div>
+                </div>
+            </div>
+            
+            <p><strong>Joined:</strong> {{ author.created_at|date:"M Y" }}</p>
+            
+            <a href="{% url 'cbv_practice:author-detail' author.pk %}" class="btn">View Profile</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; First</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+    
+    <span style="padding: 0.5rem 1rem; margin: 0 0.25rem; background: #667eea; color: white; border-radius: 3px;">
+        {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+    
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<div class="card">
+    <h3>📭 No Authors Found</h3>
+    <p>No authors are available in the system yet.</p>
+</div>
+{% endif %}
+
+<div class="card">
+    <h2>💡 ListView with Annotations</h2>
+    <p>This author list demonstrates advanced ListView features:</p>
+    
+    <div class="grid">
+        <div class="card">
+            <h3>📊 Database Annotations</h3>
+            <p>Using <code>.annotate()</code> to add calculated fields:</p>
+            <code>Author.objects.annotate(book_count=Count('books'))</code>
+            <p>This adds book and article counts directly from the database.</p>
+        </div>
+        
+        <div class="card">
+            <h3>🔢 Efficient Counting</h3>
+            <p>Count related objects without additional queries:</p>
+            <code>article_count=Count('articles')</code>
+            <p>Database-level counting is more efficient than Python loops.</p>
+        </div>
+        
+        <div class="card">
+            <h3>📋 Custom Ordering</h3>
+            <p>Sorting by author name alphabetically:</p>
+            <code>.order_by('name')</code>
+            <p>Consistent ordering improves user experience.</p>
+        </div>
+        
+        <div class="card">
+            <h3>📄 Pagination</h3>
+            <p>Built-in pagination with configurable page size:</p>
+            <code>paginate_by = 15</code>
+            <p>Handles large datasets efficiently.</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>🔗 Quick Actions</h2>
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="{% url 'cbv_practice:book-list' %}" class="btn">View All Books</a>
+        <a href="{% url 'cbv_practice:article-list' %}" class="btn">View All Articles</a>
+        <a href="{% url 'cbv_practice:stats' %}" class="btn">View Statistics</a>
+        <a href="{% url 'cbv_practice:home' %}" class="btn btn-secondary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}
