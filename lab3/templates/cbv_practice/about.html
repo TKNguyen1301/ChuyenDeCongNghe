@@ -1,0 +1,208 @@
+{% extends 'cbv_practice/base.html' %}
+
+{% block title %}{{ title }} - Class-based Views Practice{% endblock %}
+
+{% block header_title %}{{ title }}{% endblock %}
+{% block header_subtitle %}{{ description }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>📚 Welcome to Our Digital Library</h2>
+    <p>This is a comprehensive example of Django Class-based Views, built following the official Django documentation. Our library management system demonstrates various CBV patterns and best practices.</p>
+    
+    <h3>✨ Key Features</h3>
+    <div class="grid">
+        {% for feature in features %}
+        <div class="card">
+            <h4>{{ feature }}</h4>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card">
+    <h2>📊 Library Statistics</h2>
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-number">{{ stats.total_books }}</div>
+            <div class="stat-label">Total Books</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ stats.total_authors }}</div>
+            <div class="stat-label">Authors</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ stats.total_articles }}</div>
+            <div class="stat-label">Published Articles</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ stats.total_categories }}</div>
+            <div class="stat-label">Categories</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>🏛️ Class-based Views Demonstrated</h2>
+    <p>This application showcases the following Django CBV concepts:</p>
+    
+    <div class="grid">
+        <div class="card">
+            <h3>📄 TemplateView</h3>
+            <p><strong>What it is:</strong> Renders a template with context data</p>
+            <p><strong>Use case:</strong> Static pages like this About page</p>
+            <p><strong>Example:</strong> This very page you're viewing</p>
+            <code>class AboutView(TemplateView):</code>
+        </div>
+        
+        <div class="card">
+            <h3>🔄 RedirectView</h3>
+            <p><strong>What it is:</strong> Redirects users to another URL</p>
+            <p><strong>Use case:</strong> URL forwarding, random content</p>
+            <p><strong>Example:</strong> <a href="{% url 'cbv_practice:random-book' %}">Random book redirect</a></p>
+            <code>class RandomBookRedirectView(RedirectView):</code>
+        </div>
+        
+        <div class="card">
+            <h3>📋 ListView</h3>
+            <p><strong>What it is:</strong> Displays a list of objects</p>
+            <p><strong>Use case:</strong> Listing books, authors, articles</p>
+            <p><strong>Example:</strong> <a href="{% url 'cbv_practice:book-list' %}">Books listing</a></p>
+            <code>class BookListView(ListView):</code>
+        </div>
+        
+        <div class="card">
+            <h3>🔍 DetailView</h3>
+            <p><strong>What it is:</strong> Shows details of a single object</p>
+            <p><strong>Use case:</strong> Book details, author profiles</p>
+            <p><strong>Example:</strong> Individual book or author pages</p>
+            <code>class BookDetailView(DetailView):</code>
+        </div>
+        
+        <div class="card">
+            <h3>🔧 Base View</h3>
+            <p><strong>What it is:</strong> Foundation for all class-based views</p>
+            <p><strong>Use case:</strong> Custom HTTP method handling</p>
+            <p><strong>Example:</strong> <a href="{% url 'cbv_practice:basic-view' %}">Basic view demo</a></p>
+            <code>class BasicView(View):</code>
+        </div>
+        
+        <div class="card">
+            <h3>⚡ Async Views</h3>
+            <p><strong>What it is:</strong> Asynchronous processing views</p>
+            <p><strong>Use case:</strong> API calls, concurrent operations</p>
+            <p><strong>Example:</strong> <a href="{% url 'cbv_practice:async-view' %}">Async demo</a></p>
+            <code>class AsyncView(View):</code>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>🎯 Learning Objectives</h2>
+    <p>After exploring this application, you will understand:</p>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <div>
+            <h3>Core Concepts</h3>
+            <ul>
+                <li>HTTP method dispatch in CBVs</li>
+                <li>Template rendering with context</li>
+                <li>URL redirection patterns</li>
+                <li>Object listing and pagination</li>
+                <li>Single object display</li>
+                <li>Asynchronous view processing</li>
+            </ul>
+        </div>
+        
+        <div>
+            <h3>Advanced Patterns</h3>
+            <ul>
+                <li>Custom mixins for code reuse</li>
+                <li>Method overriding</li>
+                <li>Context data customization</li>
+                <li>Queryset optimization</li>
+                <li>Form handling with CBVs</li>
+                <li>Error handling and custom responses</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>🛠️ Technical Implementation</h2>
+    <p>This application demonstrates Django best practices:</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Implementation</th>
+                <th>Benefits</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Model Relationships</td>
+                <td>ForeignKey, ManyToMany</td>
+                <td>Data integrity, efficient queries</td>
+            </tr>
+            <tr>
+                <td>URL Patterns</td>
+                <td>Named URLs, namespaces</td>
+                <td>Maintainable, reversible URLs</td>
+            </tr>
+            <tr>
+                <td>Template Inheritance</td>
+                <td>Base templates, blocks</td>
+                <td>DRY principle, consistent design</td>
+            </tr>
+            <tr>
+                <td>Query Optimization</td>
+                <td>select_related, prefetch_related</td>
+                <td>Reduced database queries</td>
+            </tr>
+            <tr>
+                <td>Pagination</td>
+                <td>Built-in ListView pagination</td>
+                <td>Better performance, UX</td>
+            </tr>
+            <tr>
+                <td>Async Support</td>
+                <td>async/await in views</td>
+                <td>Better concurrency handling</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h2>🚀 Get Started</h2>
+    <p>Ready to explore? Here are some recommended paths:</p>
+    
+    <div class="grid">
+        <a href="{% url 'cbv_practice:basic-view' %}" class="btn" style="text-align: center; display: block;">
+            🔧 Start with Basic Views
+        </a>
+        <a href="{% url 'cbv_practice:book-list' %}" class="btn" style="text-align: center; display: block;">
+            📚 Browse the Library
+        </a>
+        <a href="{% url 'cbv_practice:async-view' %}" class="btn" style="text-align: center; display: block;">
+            ⚡ Try Async Features
+        </a>
+        <a href="{% url 'cbv_practice:stats' %}" class="btn" style="text-align: center; display: block;">
+            📊 View Statistics
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <h2>📚 References</h2>
+    <p>This implementation is based on the official Django documentation:</p>
+    <ul>
+        <li><a href="https://docs.djangoproject.com/en/5.2/topics/class-based-views/" target="_blank">Class-based views overview</a></li>
+        <li><a href="https://docs.djangoproject.com/en/5.2/topics/class-based-views/intro/" target="_blank">Introduction to class-based views</a></li>
+        <li><a href="https://docs.djangoproject.com/en/5.2/ref/class-based-views/" target="_blank">Class-based views reference</a></li>
+        <li><a href="https://docs.djangoproject.com/en/5.2/topics/async/" target="_blank">Asynchronous support</a></li>
+    </ul>
+</div>
+{% endblock %}
