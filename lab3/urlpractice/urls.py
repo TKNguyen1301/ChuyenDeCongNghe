@@ -21,26 +21,47 @@ from django.http import HttpResponse
 # Simple view cho trang chủ
 def home(request):
     return HttpResponse("""
-    <h1>URL Practice Lab 3</h1>
-    <h2>Available URLs:</h2>
+    <h1>Django Practice Lab 3</h1>
+    <h2>Available Sections:</h2>
     <ul>
-        <li><a href="/articles/">Articles App</a></li>
-        <li><a href="/blog/">Blog App</a></li>
-        <li><a href="/author-blog/">Author Blog (Namespace)</a></li>
-        <li><a href="/publisher-blog/">Publisher Blog (Namespace)</a></li>
-        <li><a href="/admin/">Admin</a></li>
+        <li><a href="/articles/">📰 Articles App (URL Dispatcher Practice)</a></li>
+        <li><a href="/blog/">📝 Blog App (Namespaces Practice)</a></li>
+        <li><a href="/views/">👁️ Views Practice (Django Views)</a></li>
+        <li><a href="/author-blog/">✍️ Author Blog (Namespace Instance)</a></li>
+        <li><a href="/publisher-blog/">📚 Publisher Blog (Namespace Instance)</a></li>
+        <li><a href="/admin/">⚙️ Admin</a></li>
     </ul>
     
-    <h3>Examples:</h3>
+    <h3>📰 Articles Examples (URL Practice):</h3>
     <ul>
         <li><a href="/articles/2003/">Special case 2003</a></li>
         <li><a href="/articles/2024/">Year archive 2024</a></li>
         <li><a href="/articles/2024/12/">Month archive 2024/12</a></li>
         <li><a href="/articles/2024/12/django-urls/">Article detail</a></li>
         <li><a href="/articles/custom/2024/">Custom converter example</a></li>
-        <li><a href="/blog/">Blog index</a></li>
-        <li><a href="/blog/page/5/">Blog page 5</a></li>
+        <li><a href="/articles/examples/">URL Examples Template</a></li>
     </ul>
+    
+    <h3>👁️ Views Examples:</h3>
+    <ul>
+        <li><a href="/views/current-datetime/">Simple View - Current DateTime</a></li>
+        <li><a href="/views/hello/">Hello World View</a></li>
+        <li><a href="/views/params/Django/25/">View with Parameters</a></li>
+        <li><a href="/views/item/999/">404 Exception Demo</a></li>
+        <li><a href="/views/json/">JSON Response</a></li>
+        <li><a href="/views/async-datetime/">Async View</a></li>
+        <li><a href="/views/form/">Form Handling</a></li>
+    </ul>
+    
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2, h3 { color: #34495e; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin: 8px 0; padding: 10px; background: #f8f9fa; border-left: 4px solid #3498db; }
+        a { color: #2980b9; text-decoration: none; font-weight: bold; }
+        a:hover { color: #3498db; }
+    </style>
     """)
 
 urlpatterns = [
@@ -53,6 +74,9 @@ urlpatterns = [
     # Include blog app URLs với application namespace
     path('blog/', include('blog.urls')),
     
+    # Include views practice URLs
+    path('views/', include('views_practice.urls')),
+    
     # Multiple instances với different instance namespaces
     path('author-blog/', include('blog.urls', namespace='author-blog')),
     path('publisher-blog/', include('blog.urls', namespace='publisher-blog')),
@@ -61,8 +85,8 @@ urlpatterns = [
     path('special-blog/', include('blog.urls'), {'special': True}),
 ]
 
-# Custom error handlers (tùy chọn)
-handler404 = 'django.views.defaults.page_not_found'
-handler500 = 'django.views.defaults.server_error'
-handler403 = 'django.views.defaults.permission_denied'
+# Custom error handlers (theo tài liệu Django)
+handler404 = 'views_practice.views.custom_404_view'
+handler500 = 'views_practice.views.custom_500_view'
+handler403 = 'views_practice.views.custom_403_view'
 handler400 = 'django.views.defaults.bad_request'

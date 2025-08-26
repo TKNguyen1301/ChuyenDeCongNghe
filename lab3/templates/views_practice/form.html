@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .form-container {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        input[type="text"], input[type="email"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .submit-btn {
+            background: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .submit-btn:hover {
+            background: #2980b9;
+        }
+        .error {
+            color: #e74c3c;
+            background: #fadbd8;
+            border: 1px solid #e74c3c;
+            padding: 10px;
+            border-radius: 3px;
+            margin-bottom: 15px;
+        }
+        .back-link {
+            display: inline-block;
+            background: #95a5a6;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 3px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📝 Form Handling Example</h1>
+        <p>Django Form Processing Demo</p>
+    </div>
+
+    {% if error %}
+    <div class="error">
+        <strong>Error:</strong> {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="form-container">
+        <h3>Contact Form</h3>
+        <p>This form demonstrates Django's form handling capabilities:</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" value="{{ name|default:'' }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ email|default:'' }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required>{{ message|default:'' }}</textarea>
+            </div>
+            
+            <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+    </div>
+
+    <div style="margin-top: 20px; padding: 15px; background: #e8f5e8; border-radius: 5px;">
+        <h4>💡 How This Works</h4>
+        <ul>
+            <li><strong>GET Request:</strong> Displays the form</li>
+            <li><strong>POST Request:</strong> Processes form data</li>
+            <li><strong>Validation:</strong> Checks required fields</li>
+            <li><strong>CSRF Protection:</strong> Uses {% csrf_token %}</li>
+            <li><strong>Error Handling:</strong> Shows validation errors</li>
+            <li><strong>Success:</strong> Redirects to success page</li>
+        </ul>
+    </div>
+
+    <a href="{% url 'views_practice:index' %}" class="back-link">← Back to Views Practice</a>
+</body>
+</html>

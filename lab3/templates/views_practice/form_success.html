@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Submitted Successfully</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .header {
+            background: #27ae60;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .success-card {
+            background: #d5f4e6;
+            border: 1px solid #27ae60;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .data-display {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .back-links {
+            margin-top: 20px;
+        }
+        .back-link {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>✅ Form Submitted Successfully!</h1>
+        <p>Your message has been received</p>
+    </div>
+
+    <div class="success-card">
+        <h3>📧 Message Details</h3>
+        <div class="data-display">
+            <p><strong>Name:</strong> {{ name }}</p>
+            <p><strong>Email:</strong> {{ email }}</p>
+            <p><strong>Message:</strong></p>
+            <p style="background: white; padding: 10px; border-radius: 3px; margin-top: 5px;">{{ message }}</p>
+        </div>
+    </div>
+
+    <div style="background: #e8f5e8; padding: 15px; border-radius: 5px;">
+        <h4>💡 What Happened</h4>
+        <ul>
+            <li>Form data was received via POST request</li>
+            <li>All required fields were validated</li>
+            <li>Data was processed successfully</li>
+            <li>In a real application, this would be saved to database</li>
+            <li>User receives confirmation feedback</li>
+        </ul>
+    </div>
+
+    <div class="back-links">
+        <a href="{% url 'views_practice:form_view' %}" class="back-link">📝 Submit Another Form</a>
+        <a href="{% url 'views_practice:index' %}" class="back-link">← Back to Views Practice</a>
+    </div>
+</body>
+</html>
