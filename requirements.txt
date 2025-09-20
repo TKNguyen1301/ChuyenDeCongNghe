@@ -4,6 +4,9 @@
 # Core Django Framework
 Django==5.2.5
 
+# Django REST Framework
+djangorestframework==3.15.2
+
 # ASGI support for async operations
 asgiref==3.9.1
 
