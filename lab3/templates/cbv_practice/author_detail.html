@@ -1,0 +1,137 @@
+{% extends 'cbv_practice/base.html' %}
+
+{% block title %}{{ author.name }} - Author Profile{% endblock %}
+
+{% block header_title %}👨‍💼 {{ author.name }}{% endblock %}
+{% block header_subtitle %}Author Profile - DetailView Example{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+        <div>
+            <h2>{{ author.name }}</h2>
+            
+            <table>
+                <tr>
+                    <th>Email:</th>
+                    <td><a href="mailto:{{ author.email }}">{{ author.email }}</a></td>
+                </tr>
+                {% if author.birth_date %}
+                <tr>
+                    <th>Birth Date:</th>
+                    <td>{{ author.birth_date|date:"F d, Y" }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th>Member Since:</th>
+                    <td>{{ author.created_at|date:"F Y" }}</td>
+                </tr>
+                <tr>
+                    <th>Total Books:</th>
+                    <td>{{ total_books }}</td>
+                </tr>
+                <tr>
+                    <th>Published Articles:</th>
+                    <td>{{ total_articles }}</td>
+                </tr>
+            </table>
+            
+            <div style="margin-top: 2rem;">
+                <a href="{% url 'cbv_practice:author-list' %}" class="btn btn-secondary">← Back to Authors</a>
+            </div>
+        </div>
+        
+        <div>
+            <h3>Biography</h3>
+            <p>{{ author.bio|default:"No biography available." }}</p>
+        </div>
+    </div>
+</div>
+
+{% if books %}
+<div class="card">
+    <h2>📚 Books by {{ author.name }}</h2>
+    <div class="grid">
+        {% for book in books %}
+        <div class="card">
+            <h4><a href="{% url 'cbv_practice:book-detail' book.pk %}">{{ book.title }}</a></h4>
+            <p><strong>Category:</strong> <a href="{% url 'cbv_practice:category-detail' book.category.slug %}">{{ book.category.name }}</a></p>
+            <p><strong>Published:</strong> {{ book.publication_date|date:"F Y" }}</p>
+            <p><strong>Price:</strong> ${{ book.price }}</p>
+            <p>{{ book.description|truncatewords:15 }}</p>
+            {% if book.is_available %}
+                <span style="color: green; font-size: 0.9rem;">✅ Available</span>
+            {% else %}
+                <span style="color: red; font-size: 0.9rem;">❌ Not Available</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% if total_books > books.count %}
+    <p style="text-align: center; margin-top: 1rem;">
+        <em>Showing {{ books.count }} of {{ total_books }} books</em>
+    </p>
+    {% endif %}
+</div>
+{% endif %}
+
+{% if articles %}
+<div class="card">
+    <h2>📝 Articles by {{ author.name }}</h2>
+    <div class="grid">
+        {% for article in articles %}
+        <div class="card">
+            <h4><a href="{% url 'cbv_practice:article-detail' article.slug %}">{{ article.title }}</a></h4>
+            <p><strong>Category:</strong> <a href="{% url 'cbv_practice:category-detail' article.category.slug %}">{{ article.category.name }}</a></p>
+            <p><strong>Published:</strong> {{ article.published_date|date:"M d, Y" }}</p>
+            <p><strong>Views:</strong> {{ article.views_count }}</p>
+            <p>{{ article.content|truncatewords:20 }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% if total_articles > articles.count %}
+    <p style="text-align: center; margin-top: 1rem;">
+        <em>Showing {{ articles.count }} of {{ total_articles }} articles</em>
+    </p>
+    {% endif %}
+</div>
+{% endif %}
+
+{% if not books and not articles %}
+<div class="card">
+    <h2>📭 No Content Yet</h2>
+    <p>{{ author.name }} hasn't published any books or articles yet.</p>
+</div>
+{% endif %}
+
+<div class="card">
+    <h2>💡 DetailView Features Demonstrated</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>🔍 Single Object Display</h3>
+            <p>DetailView automatically retrieves and displays one object</p>
+            <code>model = Author</code>
+        </div>
+        
+        <div class="card">
+            <h3>📊 Related Data</h3>
+            <p>Custom context adds related books and articles</p>
+            <code>author.books.filter(is_available=True)</code>
+        </div>
+        
+        <div class="card">
+            <h3>🔢 Counting</h3>
+            <p>Efficient counting of related objects</p>
+            <code>total_books = author.books.count()</code>
+        </div>
+        
+        <div class="card">
+            <h3>🎯 Context Enhancement</h3>
+            <p>get_context_data() adds additional information</p>
+            <code>context['total_articles'] = ...</code>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+<!-- Tag Cloud Widget -->
+<div class="sidebar">
+    <h5><i class="fas fa-tags"></i> Tag Cloud</h5>
+    {% if tags %}
+        <div class="tag-cloud">
+            {% for item in tags %}
+                <a href="{{ item.tag.get_absolute_url }}" 
+                   style="font-size: {{ item.font_size|default:100 }}%; color: {{ item.tag.color }};"
+                   title="{{ item.post_count }} post{{ item.post_count|pluralize }}">
+                    #{{ item.tag.name }}
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">No tags available.</p>
+    {% endif %}
+</div>

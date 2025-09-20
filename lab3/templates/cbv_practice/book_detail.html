@@ -1,0 +1,132 @@
+{% extends 'cbv_practice/base.html' %}
+
+{% block title %}{{ book.title }} - Book Detail{% endblock %}
+
+{% block header_title %}📖 {{ book.title }}{% endblock %}
+{% block header_subtitle %}DetailView Example with Related Objects{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+        <div>
+            <h2>{{ book.title }}</h2>
+            
+            <table>
+                <tr>
+                    <th>Authors:</th>
+                    <td>
+                        {% for author in book.authors.all %}
+                            <a href="{% url 'cbv_practice:author-detail' author.pk %}">{{ author.name }}</a>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Category:</th>
+                    <td><a href="{% url 'cbv_practice:category-detail' book.category.slug %}">{{ book.category.name }}</a></td>
+                </tr>
+                <tr>
+                    <th>Publication Date:</th>
+                    <td>{{ book.publication_date|date:"F d, Y" }}</td>
+                </tr>
+                <tr>
+                    <th>ISBN:</th>
+                    <td>{{ book.isbn }}</td>
+                </tr>
+                <tr>
+                    <th>Pages:</th>
+                    <td>{{ book.pages }}</td>
+                </tr>
+                <tr>
+                    <th>Price:</th>
+                    <td>${{ book.price }}</td>
+                </tr>
+                <tr>
+                    <th>Status:</th>
+                    <td>
+                        {% if book.is_available %}
+                            <span style="color: green;">✅ Available</span>
+                        {% else %}
+                            <span style="color: red;">❌ Not Available</span>
+                        {% endif %}
+                        
+                        {% if book.is_new_release %}
+                            <span style="background: #e3f2fd; color: #1976d2; padding: 0.25rem; border-radius: 3px; font-size: 0.8rem; margin-left: 0.5rem;">🆕 New Release</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div>
+            <h3>Description</h3>
+            <p>{{ book.description }}</p>
+            
+            <div style="margin-top: 2rem;">
+                <a href="{% url 'cbv_practice:book-list' %}" class="btn btn-secondary">← Back to Books</a>
+                <a href="{% url 'cbv_practice:category-detail' book.category.slug %}" class="btn">More in {{ book.category.name }}</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if related_books %}
+<div class="card">
+    <h2>📚 Related Books in {{ book.category.name }}</h2>
+    <div class="grid">
+        {% for related_book in related_books %}
+        <div class="card">
+            <h4><a href="{% url 'cbv_practice:book-detail' related_book.pk %}">{{ related_book.title }}</a></h4>
+            <p><strong>Authors:</strong> {% for author in related_book.authors.all %}{{ author.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+            <p><strong>Price:</strong> ${{ related_book.price }}</p>
+            <p>{{ related_book.description|truncatewords:15 }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if author_articles %}
+<div class="card">
+    <h2>📝 Articles by Book Authors</h2>
+    <div class="grid">
+        {% for article in author_articles %}
+        <div class="card">
+            <h4><a href="{% url 'cbv_practice:article-detail' article.slug %}">{{ article.title }}</a></h4>
+            <p><strong>By:</strong> <a href="{% url 'cbv_practice:author-detail' article.author.pk %}">{{ article.author.name }}</a></p>
+            <p><strong>Published:</strong> {{ article.published_date|date:"M d, Y" }}</p>
+            <p>{{ article.content|truncatewords:20 }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<div class="card">
+    <h2>💡 DetailView Features Demonstrated</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>🔍 Object Retrieval</h3>
+            <p>Automatic object retrieval using URL parameter (pk={{ book.pk }})</p>
+            <code>get_object() method</code>
+        </div>
+        
+        <div class="card">
+            <h3>🔗 Related Objects</h3>
+            <p>Efficient loading of related authors and categories</p>
+            <code>select_related(), prefetch_related()</code>
+        </div>
+        
+        <div class="card">
+            <h3>📊 Context Enhancement</h3>
+            <p>Additional context data added via get_context_data()</p>
+            <code>related_books, author_articles</code>
+        </div>
+        
+        <div class="card">
+            <h3>❌ Error Handling</h3>
+            <p>Automatic 404 handling for non-existent objects</p>
+            <code>Http404 exception</code>
+        </div>
+    </div>
+</div>
+{% endblock %}

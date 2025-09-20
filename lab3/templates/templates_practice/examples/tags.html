@@ -1,0 +1,381 @@
+{% extends 'templates_practice/base.html' %}
+{% load blog_extras %}
+
+{% block title %}Template Tags Examples - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h1 class="mb-4">
+                <i class="fas fa-tags"></i> Django Template Tags Examples
+            </h1>
+            
+            <p class="lead">
+                Template tags provide arbitrary logic in the rendering process. They can output content, 
+                serve as control structures, or access other template functionality.
+            </p>
+
+            <!-- Control Structure Tags -->
+            <section class="mb-5">
+                <h2>Control Structure Tags</h2>
+
+                <h4>For Loop Tag</h4>
+                <p>The <code>{% templatetag openblock %} for {% templatetag closeblock %}</code> tag allows you to iterate over sequences.</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Template Code:</h5>
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} for user in user_list {% templatetag closeblock %}
+  {{ forloop.counter }}. {{ user }}
+  {% templatetag openblock %} if forloop.first {% templatetag closeblock %}(First){% templatetag openblock %} endif {% templatetag closeblock %}
+  {% templatetag openblock %} if forloop.last {% templatetag closeblock %}(Last){% templatetag openblock %} endif {% templatetag closeblock %}
+{% templatetag openblock %} endfor {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Output:</h5>
+                        <div class="code-block">
+                            {% for user in user_list %}
+                                {{ forloop.counter }}. {{ user }}
+                                {% if forloop.first %}(First){% endif %}
+                                {% if forloop.last %}(Last){% endif %}<br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">For Empty</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} for item in empty_list {% templatetag closeblock %}
+  {{ item }}
+{% templatetag openblock %} empty {% templatetag closeblock %}
+  No items found.
+{% templatetag openblock %} endfor {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {% for item in empty_list %}
+                                {{ item }}
+                            {% empty %}
+                                No items found.
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">If Statements</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} if conditions.is_morning {% templatetag closeblock %}
+  Good morning!
+{% templatetag openblock %} elif conditions.is_weekend {% templatetag closeblock %}
+  Happy weekend!
+{% templatetag openblock %} else {% templatetag closeblock %}
+  Hello there!
+{% templatetag openblock %} endif {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {% if conditions.is_morning %}
+                                Good morning!
+                            {% elif conditions.is_weekend %}
+                                Happy weekend!
+                            {% else %}
+                                Hello there!
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Complex Conditions</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} if user.is_authenticated and conditions.is_morning {% templatetag closeblock %}
+  Good morning, {{ user.username }}!
+{% templatetag openblock %} endif {% templatetag closeblock %}
+
+{% templatetag openblock %} if demo_count > 10 {% templatetag closeblock %}
+  High count: {{ demo_count }}
+{% templatetag openblock %} endif {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {% if is_authenticated and conditions.is_morning %}
+                                Good morning, {{ user_full_name|default:"User" }}!<br>
+                            {% endif %}
+                            
+                            {% if demo_count > 10 %}
+                                High count: {{ demo_count }}<br>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Template Organization Tags -->
+            <section class="mb-5">
+                <h2>Template Organization Tags</h2>
+
+                <h4>Include Tag</h4>
+                <p>The <code>{% templatetag openblock %} include {% templatetag closeblock %}</code> tag loads and renders another template.</p>
+                <div class="code-block">
+<pre><code>{% templatetag openblock %} include "templates_practice/includes/alert.html" with message="Hello from include!" type="success" {% templatetag closeblock %}</code></pre>
+                </div>
+                
+                <div class="mt-3">
+                    <div class="alert alert-success" role="alert">
+                        <i class="fas fa-check-circle"></i> Hello from include! (This would be an included template)
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Block Tag</h4>
+                <p>The <code>{% templatetag openblock %} block {% templatetag closeblock %}</code> tag defines sections that child templates can override.</p>
+                <div class="code-block">
+<pre><code>{% templatetag openblock %} block content {% templatetag closeblock %}
+  Default content here
+{% templatetag openblock %} endblock {% templatetag closeblock %}</code></pre>
+                </div>
+
+                <h4 class="mt-4">Extends Tag</h4>
+                <div class="code-block">
+<pre><code>{% templatetag openblock %} extends "base.html" {% templatetag closeblock %}</code></pre>
+                </div>
+            </section>
+
+            <!-- Utility Tags -->
+            <section class="mb-5">
+                <h2>Utility Tags</h2>
+
+                <h4>URL Tag</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} url 'templates_practice:home' {% templatetag closeblock %}
+{% templatetag openblock %} url 'templates_practice:post_detail' slug='example' {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {% url 'templates_practice:home' %}<br>
+                            /templates/posts/example-slug/
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">CSRF Token</h4>
+                <div class="code-block">
+<pre><code>&lt;form method="post"&gt;
+  {% templatetag openblock %} csrf_token {% templatetag closeblock %}
+  &lt;!-- form fields --&gt;
+&lt;/form&gt;</code></pre>
+                </div>
+
+                <h4 class="mt-4">Load Tag</h4>
+                <div class="code-block">
+<pre><code>{% templatetag openblock %} load static {% templatetag closeblock %}
+{% templatetag openblock %} load blog_extras {% templatetag closeblock %}</code></pre>
+                </div>
+
+                <h4 class="mt-4">Static Tag</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} static 'css/style.css' {% templatetag closeblock %}
+{% templatetag openblock %} static 'js/script.js' {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            /static/css/style.css<br>
+                            /static/js/script.js
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Advanced Tags -->
+            <section class="mb-5">
+                <h2>Advanced Tags</h2>
+
+                <h4>With Tag</h4>
+                <p>The <code>{% templatetag openblock %} with {% templatetag closeblock %}</code> tag caches complex variables.</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} with total=posts_sample|length {% templatetag closeblock %}
+  Total posts: {{ total }}
+  {% templatetag openblock %} if total > 5 {% templatetag closeblock %}
+    Many posts!
+  {% templatetag openblock %} endif {% templatetag closeblock %}
+{% templatetag openblock %} endwith {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {% with total=posts_sample|length %}
+                                Total posts: {{ total }}<br>
+                                {% if total > 3 %}
+                                    Many posts!<br>
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Spaceless Tag</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} spaceless {% templatetag closeblock %}
+  &lt;p&gt;
+    &lt;strong&gt;Bold&lt;/strong&gt; text
+  &lt;/p&gt;
+{% templatetag openblock %} endspaceless {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {% spaceless %}
+                                <p>
+                                    <strong>Bold</strong> text
+                                </p>
+                            {% endspaceless %}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Cycle Tag</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} for item in user_list {% templatetag closeblock %}
+  &lt;tr class="{% templatetag openblock %} cycle 'row1' 'row2' {% templatetag closeblock %}"&gt;
+    &lt;td&gt;{{ item }}&lt;/td&gt;
+  &lt;/tr&gt;
+{% templatetag openblock %} endfor {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            <table class="table table-sm">
+                                {% for item in user_list %}
+                                <tr class="{% cycle 'table-light' 'table-secondary' %}">
+                                    <td>{{ item }}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Now Tag</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} now "Y-m-d H:i:s" {% templatetag closeblock %}
+{% templatetag openblock %} now "F j, Y" {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {% now "Y-m-d H:i:s" %}<br>
+                            {% now "F j, Y" %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Nested Loops Example -->
+            <section class="mb-5">
+                <h2>Nested Loops and Complex Logic</h2>
+                
+                <h4>Nested For Loops</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} for row in nested_list {% templatetag closeblock %}
+  Row {{ forloop.counter }}:
+  {% templatetag openblock %} for item in row {% templatetag closeblock %}
+    {{ item }}{% templatetag openblock %} if not forloop.last {% templatetag closeblock %}, {% templatetag openblock %} endif {% templatetag closeblock %}
+  {% templatetag openblock %} endfor {% templatetag closeblock %}
+{% templatetag openblock %} endfor {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {% for row in nested_list %}
+                                Row {{ forloop.counter }}:
+                                {% for item in row %}
+                                    {{ item }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}<br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Forloop Variables</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Variable</th>
+                                <th>Description</th>
+                                <th>Example Output</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in user_list %}
+                            <tr>
+                                <td><code>forloop.counter</code></td>
+                                <td>1-indexed counter</td>
+                                <td>{{ forloop.counter }}</td>
+                            </tr>
+                            {% if forloop.first %}
+                            <tr>
+                                <td><code>forloop.counter0</code></td>
+                                <td>0-indexed counter</td>
+                                <td>{{ forloop.counter0 }}</td>
+                            </tr>
+                            <tr>
+                                <td><code>forloop.revcounter</code></td>
+                                <td>Reverse counter</td>
+                                <td>{{ forloop.revcounter }}</td>
+                            </tr>
+                            <tr>
+                                <td><code>forloop.first</code></td>
+                                <td>First iteration?</td>
+                                <td>{{ forloop.first }}</td>
+                            </tr>
+                            <tr>
+                                <td><code>forloop.last</code></td>
+                                <td>Last iteration?</td>
+                                <td>{{ forloop.last }}</td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Navigation -->
+            <div class="d-flex justify-content-between mt-5">
+                <a href="{% url 'templates_practice:template_filters' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Template Filters
+                </a>
+                <a href="{% url 'templates_practice:template_inheritance' %}" class="btn btn-primary">
+                    Next: Template Inheritance <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

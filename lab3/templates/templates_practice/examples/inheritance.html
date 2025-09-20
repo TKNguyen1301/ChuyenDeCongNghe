@@ -1,0 +1,381 @@
+{% extends 'templates_practice/base.html' %}
+{% load blog_extras %}
+
+{% block title %}Template Inheritance - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h1 class="mb-4">
+                <i class="fas fa-sitemap"></i> Django Template Inheritance
+            </h1>
+            
+            <p class="lead">
+                Template inheritance allows you to build a base "skeleton" template 
+                that contains all the common elements of your site and defines blocks 
+                that child templates can override.
+            </p>
+
+            <!-- Template Inheritance Concept -->
+            <section class="mb-5">
+                <h2>Template Inheritance Hierarchy</h2>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="hierarchy-diagram p-4 border rounded bg-light">
+                            <div class="text-center">
+                                <div class="template-box base-template">
+                                    <h5><i class="fas fa-file-code"></i> base.html</h5>
+                                    <p class="small">Base template with common structure</p>
+                                    <div class="blocks">
+                                        <span class="badge badge-primary">title</span>
+                                        <span class="badge badge-warning">header</span>
+                                        <span class="badge badge-success">content</span>
+                                        <span class="badge badge-info">sidebar</span>
+                                        <span class="badge badge-secondary">footer</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="inheritance-arrow">
+                                    <i class="fas fa-arrow-down fa-2x text-muted"></i>
+                                </div>
+                                
+                                <div class="row mt-3">
+                                    <div class="col-md-4">
+                                        <div class="template-box child-template">
+                                            <h6><i class="fas fa-file"></i> home.html</h6>
+                                            <p class="small">Overrides: content</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="template-box child-template">
+                                            <h6><i class="fas fa-file"></i> post_list.html</h6>
+                                            <p class="small">Overrides: title, content</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="template-box child-template">
+                                            <h6><i class="fas fa-file"></i> post_detail.html</h6>
+                                            <p class="small">Overrides: title, content, sidebar</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Block Tag Examples -->
+            <section class="mb-5">
+                <h2>Block Tag Usage</h2>
+
+                <h4>Basic Block Definition</h4>
+                <p>In a base template, blocks define sections that can be overridden:</p>
+                <div class="code-block">
+<pre><code>&lt;!-- base.html --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;{% templatetag openblock %} block title {% templatetag closeblock %}My Site{% templatetag openblock %} endblock {% templatetag closeblock %}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        {% templatetag openblock %} block header {% templatetag closeblock %}
+            &lt;h1&gt;Welcome to My Site&lt;/h1&gt;
+        {% templatetag openblock %} endblock {% templatetag closeblock %}
+    &lt;/header&gt;
+    
+    &lt;main&gt;
+        {% templatetag openblock %} block content {% templatetag closeblock %}
+            &lt;p&gt;Default content&lt;/p&gt;
+        {% templatetag openblock %} endblock {% templatetag closeblock %}
+    &lt;/main&gt;
+    
+    &lt;footer&gt;
+        {% templatetag openblock %} block footer {% templatetag closeblock %}
+            &lt;p&gt;&copy; 2024 My Site&lt;/p&gt;
+        {% templatetag openblock %} endblock {% templatetag closeblock %}
+    &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                </div>
+
+                <h4 class="mt-4">Block Override in Child Template</h4>
+                <div class="code-block">
+<pre><code>&lt;!-- child.html --&gt;
+{% templatetag openblock %} extends "base.html" {% templatetag closeblock %}
+
+{% templatetag openblock %} block title {% templatetag closeblock %}Custom Page - {{ block.super }}{% templatetag openblock %} endblock {% templatetag closeblock %}
+
+{% templatetag openblock %} block content {% templatetag closeblock %}
+    &lt;h2&gt;Custom Content&lt;/h2&gt;
+    &lt;p&gt;This content replaces the default content.&lt;/p&gt;
+{% templatetag openblock %} endblock {% templatetag closeblock %}</code></pre>
+                </div>
+
+                <h4 class="mt-4">Using {{ block.super }}</h4>
+                <p>The <code>{{ block.super }}</code> variable includes content from the parent block:</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Template Code:</h5>
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} block content {% templatetag closeblock %}
+    {{ block.super }}
+    &lt;p&gt;Additional content&lt;/p&gt;
+{% templatetag openblock %} endblock {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Result:</h5>
+                        <div class="code-block">
+                            Default content from parent<br>
+                            Additional content
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Multi-level Inheritance -->
+            <section class="mb-5">
+                <h2>Multi-level Inheritance</h2>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>Level 1: base.html</h5>
+                        <div class="code-block">
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;{% templatetag openblock %} block title {% templatetag closeblock %}{% templatetag openblock %} endblock {% templatetag closeblock %}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    {% templatetag openblock %} block content {% templatetag closeblock %}{% templatetag openblock %} endblock {% templatetag closeblock %}
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <h5>Level 2: section_base.html</h5>
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} extends "base.html" {% templatetag closeblock %}
+
+{% templatetag openblock %} block content {% templatetag closeblock %}
+    &lt;nav&gt;Section Nav&lt;/nav&gt;
+    {% templatetag openblock %} block section_content {% templatetag closeblock %}{% templatetag openblock %} endblock {% templatetag closeblock %}
+{% templatetag openblock %} endblock {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <h5>Level 3: page.html</h5>
+                        <div class="code-block">
+<pre><code>{% templatetag openblock %} extends "section_base.html" {% templatetag closeblock %}
+
+{% templatetag openblock %} block title {% templatetag closeblock %}Page Title{% templatetag openblock %} endblock {% templatetag closeblock %}
+
+{% templatetag openblock %} block section_content {% templatetag closeblock %}
+    &lt;h1&gt;Page Content&lt;/h1&gt;
+{% templatetag openblock %} endblock {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Common Patterns -->
+            <section class="mb-5">
+                <h2>Common Inheritance Patterns</h2>
+
+                <h4>1. Layout Templates</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>&lt;!-- layouts/two_column.html --&gt;
+{% templatetag openblock %} extends "base.html" {% templatetag closeblock %}
+
+{% templatetag openblock %} block content {% templatetag closeblock %}
+&lt;div class="row"&gt;
+    &lt;div class="col-md-8"&gt;
+        {% templatetag openblock %} block main_content {% templatetag closeblock %}{% templatetag openblock %} endblock {% templatetag closeblock %}
+    &lt;/div&gt;
+    &lt;div class="col-md-4"&gt;
+        {% templatetag openblock %} block sidebar {% templatetag closeblock %}{% templatetag openblock %} endblock {% templatetag closeblock %}
+    &lt;/div&gt;
+&lt;/div&gt;
+{% templatetag openblock %} endblock {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>&lt;!-- page.html --&gt;
+{% templatetag openblock %} extends "layouts/two_column.html" {% templatetag closeblock %}
+
+{% templatetag openblock %} block main_content {% templatetag closeblock %}
+    &lt;h1&gt;Main Content&lt;/h1&gt;
+{% templatetag openblock %} endblock {% templatetag closeblock %}
+
+{% templatetag openblock %} block sidebar {% templatetag closeblock %}
+    &lt;h3&gt;Sidebar&lt;/h3&gt;
+{% templatetag openblock %} endblock {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">2. Section Templates</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>&lt;!-- blog/base.html --&gt;
+{% templatetag openblock %} extends "base.html" {% templatetag closeblock %}
+
+{% templatetag openblock %} block extra_css {% templatetag closeblock %}
+    &lt;link rel="stylesheet" href="blog.css"&gt;
+{% templatetag openblock %} endblock {% templatetag closeblock %}
+
+{% templatetag openblock %} block content {% templatetag closeblock %}
+    &lt;nav&gt;Blog Navigation&lt;/nav&gt;
+    {% templatetag openblock %} block blog_content {% templatetag closeblock %}{% templatetag openblock %} endblock {% templatetag closeblock %}
+{% templatetag openblock %} endblock {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>&lt;!-- blog/post_detail.html --&gt;
+{% templatetag openblock %} extends "blog/base.html" {% templatetag closeblock %}
+
+{% templatetag openblock %} block blog_content {% templatetag closeblock %}
+    &lt;article&gt;
+        &lt;h1&gt;{{ post.title }}&lt;/h1&gt;
+        &lt;p&gt;{{ post.content }}&lt;/p&gt;
+    &lt;/article&gt;
+{% templatetag openblock %} endblock {% templatetag closeblock %}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">3. Conditional Block Extension</h4>
+                <div class="code-block">
+<pre><code>{% templatetag openblock %} block extra_head {% templatetag closeblock %}
+    {% templatetag openblock %} if user.is_staff {% templatetag closeblock %}
+        &lt;link rel="stylesheet" href="admin-styles.css"&gt;
+    {% templatetag openblock %} endif {% templatetag closeblock %}
+    {{ block.super }}
+{% templatetag openblock %} endblock {% templatetag closeblock %}</code></pre>
+                </div>
+            </section>
+
+            <!-- Best Practices -->
+            <section class="mb-5">
+                <h2>Best Practices</h2>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-success text-white">
+                                <h5><i class="fas fa-check"></i> Do's</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success"></i> Use descriptive block names</li>
+                                    <li><i class="fas fa-check text-success"></i> Keep blocks focused and single-purpose</li>
+                                    <li><i class="fas fa-check text-success"></i> Provide default content in base blocks</li>
+                                    <li><i class="fas fa-check text-success"></i> Use {{ block.super }} when extending content</li>
+                                    <li><i class="fas fa-check text-success"></i> Create intermediate templates for common layouts</li>
+                                    <li><i class="fas fa-check text-success"></i> Keep inheritance hierarchies shallow</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-danger text-white">
+                                <h5><i class="fas fa-times"></i> Don'ts</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-times text-danger"></i> Don't create too many inheritance levels</li>
+                                    <li><i class="fas fa-times text-danger"></i> Don't make blocks too granular</li>
+                                    <li><i class="fas fa-times text-danger"></i> Don't forget {% templatetag openblock %} extends {% templatetag closeblock %} as first line</li>
+                                    <li><i class="fas fa-times text-danger"></i> Don't duplicate content across templates</li>
+                                    <li><i class="fas fa-times text-danger"></i> Don't use inheritance for simple includes</li>
+                                    <li><i class="fas fa-times text-danger"></i> Don't nest blocks unnecessarily</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Real Example -->
+            <section class="mb-5">
+                <h2>Real Example: This Page</h2>
+                <p>This very page demonstrates template inheritance. Here's how it's structured:</p>
+                
+                <div class="code-block">
+<pre><code>{% templatetag openblock %} extends 'templates_practice/base.html' {% templatetag closeblock %}
+{% templatetag openblock %} load blog_extras {% templatetag closeblock %}
+
+{% templatetag openblock %} block title {% templatetag closeblock %}Template Inheritance - {{ block.super }}{% templatetag openblock %} endblock {% templatetag closeblock %}
+
+{% templatetag openblock %} block content {% templatetag closeblock %}
+&lt;div class="container my-5"&gt;
+    &lt;!-- All the content you see on this page --&gt;
+&lt;/div&gt;
+{% templatetag openblock %} endblock {% templatetag closeblock %}</code></pre>
+                </div>
+
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Note:</strong> The base template provides the HTML structure, Bootstrap CSS, 
+                    navigation, footer, and this template only defines the specific content for this page.
+                </div>
+            </section>
+
+            <!-- Navigation -->
+            <div class="d-flex justify-content-between mt-5">
+                <a href="{% url 'templates_practice:template_tags' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Template Tags
+                </a>
+                <a href="{% url 'templates_practice:home' %}" class="btn btn-primary">
+                    Back to Home <i class="fas fa-home"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hierarchy-diagram {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.template-box {
+    background: white;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.base-template {
+    border-color: #007bff;
+    background: linear-gradient(135deg, #cce7ff 0%, #b3d9ff 100%);
+}
+
+.child-template {
+    border-color: #28a745;
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+}
+
+.inheritance-arrow {
+    margin: 20px 0;
+}
+
+.blocks .badge {
+    margin: 2px;
+}
+</style>
+{% endblock %}

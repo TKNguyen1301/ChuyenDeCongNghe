@@ -1,0 +1,271 @@
+{% extends 'templates_practice/base.html' %}
+{% load blog_extras %}
+
+{% block title %}Template Engine Examples - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="mb-4">
+                <i class="fas fa-cog"></i> Django Template Engine Examples
+            </h1>
+            
+            <p class="lead">
+                This page demonstrates the Django template language syntax including variables, 
+                context lookups, and various data types.
+            </p>
+
+            <!-- Variables Section -->
+            <section class="mb-5">
+                <h2>Template Variables</h2>
+                <p>Variables are surrounded by <code>{{ "{{" }}</code> and <code>{{ "}}" }}</code> and output values from the context.</p>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Template Code:</h5>
+                        <div class="code-block">
+<pre><code>{{ "{{ demo_string }}" }}
+{{ "{{ demo_number }}" }}
+{{ "{{ demo_boolean }}" }}
+{{ "{{ demo_list.0 }}" }}
+{{ "{{ demo_dict.name }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Output:</h5>
+                        <div class="code-block">
+                            {{ demo_string }}<br>
+                            {{ demo_number }}<br>
+                            {{ demo_boolean }}<br>
+                            {{ demo_list.0 }}<br>
+                            {{ demo_dict.name }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Context Data Types -->
+            <section class="mb-5">
+                <h2>Context Data Types</h2>
+                
+                <h4>String Variables</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>demo_string = "{{ demo_string }}"
+Length: {{ "{{ demo_string|length }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            demo_string = "{{ demo_string }}"<br>
+                            Length: {{ demo_string|length }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Number Variables</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>demo_number = {{ "{{ demo_number }}" }}
+Plus 10: {{ "{{ demo_number|add:10 }}" }}
+Formatted: {{ "{{ demo_number|floatformat:2 }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            demo_number = {{ demo_number }}<br>
+                            Plus 10: {{ demo_number|add:10 }}<br>
+                            Formatted: {{ demo_number|floatformat:2 }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">List Variables</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>demo_list = {{ "{{ demo_list }}" }}
+First item: {{ "{{ demo_list.0 }}" }}
+Last item: {{ "{{ demo_list|last }}" }}
+Length: {{ "{{ demo_list|length }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            demo_list = {{ demo_list }}<br>
+                            First item: {{ demo_list.0 }}<br>
+                            Last item: {{ demo_list|last }}<br>
+                            Length: {{ demo_list|length }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-4">Dictionary Variables</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>demo_dict.name = {{ "{{ demo_dict.name }}" }}
+demo_dict.version = {{ "{{ demo_dict.version }}" }}
+demo_dict.language = {{ "{{ demo_dict.language }}" }}
+demo_dict.framework_type = {{ "{{ demo_dict.framework_type }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            demo_dict.name = {{ demo_dict.name }}<br>
+                            demo_dict.version = {{ demo_dict.version }}<br>
+                            demo_dict.language = {{ demo_dict.language }}<br>
+                            demo_dict.framework_type = {{ demo_dict.framework_type }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Object Access -->
+            <section class="mb-5">
+                <h2>Object Access</h2>
+                <p>Django templates use dot notation to access object attributes and dictionary keys.</p>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ demo_object.title }}" }}
+{{ "{{ demo_object.description }}" }}
+{{ "{{ demo_object.created_at|date:'F j, Y' }}" }}
+{{ "{{ demo_object.nested.value }}" }}
+{{ "{{ demo_object.nested.count }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ demo_object.title }}<br>
+                            {{ demo_object.description|truncate_chars:50 }}<br>
+                            {{ demo_object.created_at|date:"F j, Y" }}<br>
+                            {{ demo_object.nested.value }}<br>
+                            {{ demo_object.nested.count }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HTML and Safety -->
+            <section class="mb-5">
+                <h2>HTML Content and Safety</h2>
+                <p>Django automatically escapes HTML content for security. Use the <code>safe</code> filter or <code>autoescape</code> tag to control this behavior.</p>
+                
+                <h4>HTML Escaping (Default)</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ html_content }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ html_content }}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="mt-3">Safe HTML Output</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ html_content|safe }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ html_content|safe }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Context Processors -->
+            <section class="mb-5">
+                <h2>Context Processors</h2>
+                <p>Context processors automatically add variables to all template contexts.</p>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>SITE_NAME = {{ "{{ SITE_NAME }}" }}
+CURRENT_YEAR = {{ "{{ CURRENT_YEAR }}" }}
+DEBUG = {{ "{{ DEBUG }}" }}
+is_authenticated = {{ "{{ is_authenticated }}" }}
+user_full_name = {{ "{{ user_full_name|default:'Anonymous' }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            SITE_NAME = {{ SITE_NAME }}<br>
+                            CURRENT_YEAR = {{ CURRENT_YEAR }}<br>
+                            DEBUG = {{ DEBUG }}<br>
+                            is_authenticated = {{ is_authenticated }}<br>
+                            user_full_name = {{ user_full_name|default:"Anonymous" }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Default Values -->
+            <section class="mb-5">
+                <h2>Default Values</h2>
+                <p>Use the <code>default</code> filter to provide fallback values for empty variables.</p>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="code-block">
+<pre><code>{{ "{{ empty_variable|default:'Default Value' }}" }}
+{{ "{{ none_variable|default:'Nothing here' }}" }}
+{{ "{{ demo_string|default:'Fallback' }}" }}</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="code-block">
+                            {{ empty_variable|default:"Default Value" }}<br>
+                            {{ none_variable|default:"Nothing here" }}<br>
+                            {{ demo_string|default:"Fallback" }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Template Comments -->
+            <section class="mb-5">
+                <h2>Template Comments</h2>
+                <p>Comments in Django templates are ignored during rendering.</p>
+                
+                <div class="code-block">
+<pre><code>{# This is a single-line comment #}
+
+{% comment %}
+This is a multi-line comment
+that can span several lines
+and explain complex template logic
+{% endcomment %}
+
+{# Comments are useful for: #}
+{# - Documenting template logic #}
+{# - Temporarily disabling code #}
+{# - Adding developer notes #}</code></pre>
+                </div>
+            </section>
+
+            <!-- Navigation -->
+            <div class="d-flex justify-content-between mt-5">
+                <a href="{% url 'templates_practice:home' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+                <a href="{% url 'templates_practice:template_filters' %}" class="btn btn-primary">
+                    Next: Template Filters <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

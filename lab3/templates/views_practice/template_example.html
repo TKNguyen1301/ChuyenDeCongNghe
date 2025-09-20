@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .info-card {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .breadcrumb a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .back-link {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 3px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb">
+        {% for crumb in breadcrumb %}
+            {% if crumb.url %}
+                <a href="{{ crumb.url }}">{{ crumb.name }}</a> /
+            {% else %}
+                {{ crumb.name }}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="header">
+        <h1>{{ title }}</h1>
+        <p>Template-based View Example</p>
+    </div>
+
+    <div class="info-card">
+        <h3>📋 Request Information</h3>
+        <p><strong>Method:</strong> {{ request_info.method }}</p>
+        <p><strong>Path:</strong> {{ request_info.path }}</p>
+        <p><strong>User Agent:</strong> {{ request_info.user_agent }}</p>
+        <p><strong>Current Time:</strong> {{ current_time }}</p>
+    </div>
+
+    <div class="info-card">
+        <h3>🎯 Template Context</h3>
+        <p>This view demonstrates how to pass context data to templates. The context includes:</p>
+        <ul>
+            <li>Request information</li>
+            <li>Current timestamp</li>
+            <li>Custom title and breadcrumb navigation</li>
+        </ul>
+    </div>
+
+    <a href="{% url 'views_practice:index' %}" class="back-link">← Back to Views Practice</a>
+</body>
+</html>
