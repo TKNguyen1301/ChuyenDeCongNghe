@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'tutorial.snippets',
     'api_guide.validators',
+    'api_guide.caching',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +130,28 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
+
+# Cache configuration
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    },
+    'file_cache': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/tmp/django_cache',
+    },
+    'dummy_cache': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
+# Cache middleware (optional - can be enabled for site-wide caching)
+# MIDDLEWARE = [
+#     'django.middleware.cache.UpdateCacheMiddleware',
+#     ...existing middleware...
+#     'django.middleware.cache.FetchFromCacheMiddleware',
+# ]
+
+# Cache timeout settings
+CACHE_TIMEOUT = 60 * 15  # 15 minutes default
