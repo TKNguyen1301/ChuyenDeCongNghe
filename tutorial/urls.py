@@ -34,4 +34,5 @@ urlpatterns = [
     path('validators/', include('api_guide.validators.urls')),
     path('caching/', include('api_guide.caching.urls')),
     path('filtering/', include('api_guide.filtering.urls')),
+    path('pagination/', include('api_guide.pagination.urls')),
 ]

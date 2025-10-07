@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'api_guide.validators',
     'api_guide.caching',
     'api_guide.filtering',
+    'api_guide.pagination',
 ]
 
 MIDDLEWARE = [
