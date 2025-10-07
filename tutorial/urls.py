@@ -31,4 +31,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('', include('tutorial.snippets.urls')),
+    path('validators/', include('api_guide.validators.urls')),
 ]
