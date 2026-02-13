@@ -1,0 +1,33 @@
+<!-- Recent Posts Widget -->
+<div class="sidebar">
+    <h5><i class="fas fa-clock"></i> Recent Posts</h5>
+    {% if posts %}
+        {% for post in posts %}
+        <div class="d-flex mb-3">
+            <div class="flex-shrink-0">
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" 
+                     style="width: 40px; height: 40px; font-size: 0.8rem;">
+                    {{ forloop.counter }}
+                </div>
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <h6 class="mb-1">
+                    <a href="{{ post.get_absolute_url }}" class="text-decoration-none">
+                        {{ post.title|truncate_chars:40 }}
+                    </a>
+                </h6>
+                <p class="text-muted small mb-1">
+                    {{ post.excerpt|truncate_chars:60 }}
+                </p>
+                <div class="text-muted small">
+                    <i class="fas fa-user"></i> {{ post.author.full_name }}
+                    <i class="fas fa-clock ms-2"></i> {{ post.published_at|time_ago }}
+                </div>
+            </div>
+        </div>
+        {% if not forloop.last %}<hr class="my-2">{% endif %}
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">No recent posts available.</p>
+    {% endif %}
+</div>

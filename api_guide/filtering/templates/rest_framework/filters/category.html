@@ -1,0 +1,16 @@
+{% load rest_framework %}
+
+<div class="form-group">
+    <label for="id_{{ param }}">{{ title }}:</label>
+    <select name="{{ param }}" class="form-control" id="id_{{ param }}">
+        <option value="">All Categories</option>
+        {% for category in categories %}
+            <option value="{{ category }}" {% if category == current %}selected{% endif %}>
+                {{ category }}
+            </option>
+        {% endfor %}
+    </select>
+    {% if description %}
+        <small class="form-text text-muted">{{ description }}</small>
+    {% endif %}
+</div>

@@ -1,0 +1,18 @@
+<!-- Category List Widget -->
+<div class="sidebar">
+    <h5><i class="fas fa-folder"></i> Categories</h5>
+    {% if categories %}
+        <ul class="list-unstyled">
+            {% for item in categories %}
+            <li class="mb-2">
+                <a href="{{ item.category.get_absolute_url }}" class="text-decoration-none d-flex justify-content-between">
+                    <span>{{ item.category.name }}</span>
+                    <span class="badge bg-primary">{{ item.post_count }}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-muted">No categories available.</p>
+    {% endif %}
+</div>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .info-card {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .breadcrumb {
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .breadcrumb a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .back-link {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 3px;
+            margin-top: 20px;
+        }
+        .param-display {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="breadcrumb">
+        {% for crumb in breadcrumb %}
+            {% if crumb.url %}
+                <a href="{{ crumb.url }}">{{ crumb.name }}</a> /
+            {% else %}
+                {{ crumb.name }}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="header">
+        <h1>{{ title }}</h1>
+        <p>Template with URL Parameters Example</p>
+    </div>
+
+    <div class="param-display">
+        <h3>🎯 URL Parameters Captured</h3>
+        <p><strong>Category:</strong> {{ category }}</p>
+        <p><strong>Item ID:</strong> {{ item_id }}</p>
+    </div>
+
+    <div class="info-card">
+        <h3>💡 How This Works</h3>
+        <p>This view demonstrates how URL parameters are passed to templates:</p>
+        <ul>
+            <li>The URL pattern captures <code>&lt;str:category&gt;</code> and <code>&lt;int:item_id&gt;</code></li>
+            <li>These parameters are passed to the view function</li>
+            <li>The view includes them in the template context</li>
+            <li>The template renders them dynamically</li>
+        </ul>
+    </div>
+
+    <div class="info-card">
+        <h3>🔄 Try Different URLs</h3>
+        <p>Try changing the URL parameters:</p>
+        <ul>
+            <li><a href="{% url 'views_practice:template_params' 'books' 456 %}">Books Category, Item 456</a></li>
+            <li><a href="{% url 'views_practice:template_params' 'music' 789 %}">Music Category, Item 789</a></li>
+            <li><a href="{% url 'views_practice:template_params' 'software' 101 %}">Software Category, Item 101</a></li>
+        </ul>
+    </div>
+
+    <a href="{% url 'views_practice:index' %}" class="back-link">← Back to Views Practice</a>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!-- Popular Posts Widget -->
+<div class="sidebar">
+    <h5><i class="fas fa-fire"></i> Popular Posts</h5>
+    {% if posts %}
+        {% for post in posts %}
+        <div class="d-flex mb-3">
+            <div class="flex-shrink-0">
+                <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center" 
+                     style="width: 40px; height: 40px; font-size: 0.7rem;">
+                    <i class="fas fa-fire"></i>
+                </div>
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <h6 class="mb-1">
+                    <a href="{{ post.get_absolute_url }}" class="text-decoration-none">
+                        {{ post.title|truncate_chars:40 }}
+                    </a>
+                </h6>
+                <div class="text-muted small">
+                    <i class="fas fa-eye"></i> {{ post.view_count }} views
+                    <i class="fas fa-clock ms-2"></i> {{ post.reading_time }} min read
+                </div>
+            </div>
+        </div>
+        {% if not forloop.last %}<hr class="my-2">{% endif %}
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">No popular posts available.</p>
+    {% endif %}
+</div>
